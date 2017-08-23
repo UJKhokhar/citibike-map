@@ -22,10 +22,12 @@ const config = {
     bundle: './src/index.js',
     vendor: VENDOR_LIBS
   },
+
   output: {
     path: path.resolve(__dirname, 'build'),
     filename: '[name].[chunkhash].js'
   },
+
   module: {
     rules: [
       {
@@ -45,6 +47,14 @@ const config = {
         })
     }]
   },
+
+  resolve: {
+    alias: {
+      // From mapbox-gl-js README. Required for non-browserify bundlers (e.g. webpack):
+      'mapbox-gl$': path.resolve('./node_modules/mapbox-gl/dist/mapbox-gl.js')
+    }
+  },
+
   plugins: [
     extractSass,
     new HtmlWebpackPlugin({
@@ -52,7 +62,8 @@ const config = {
     }),
     new webpack.optimize.CommonsChunkPlugin({
       name: ['vendor', 'manifest']
-    })
+    }),
+    new webpack.EnvironmentPlugin(['MapboxAccessToken'])
   ]
 };
 
