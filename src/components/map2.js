@@ -1,8 +1,7 @@
-// ES6
-import ReactMapboxGl, { Layer, Feature, Popup } from "react-mapbox-gl";
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {fetchStations, fetchStationStatus} from '../actions';
+import ReactMapboxGl, { Layer, Feature, Popup } from "react-mapbox-gl";
 import _ from 'lodash';
 
 const Map = ReactMapboxGl({
@@ -27,8 +26,6 @@ class Map2 extends Component {
 
   stationClick = (station) => {
     var status = this.getStationStatus(station);
-
-    console.log(status);
 
     this.setState({
       center: [station.lon, station.lat],

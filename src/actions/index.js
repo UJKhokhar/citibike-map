@@ -20,3 +20,19 @@ export function fetchStationStatus(){
     payload: request
   }
 }
+
+export const FETCH_ROUTE = 'FETCH_ROUTE';
+
+const baseURL = 'https://api.mapbox.com/directions/v5/mapbox/cycling';
+const accessToken = 'pk.eyJ1IjoidW1vIiwiYSI6ImNqNjU0bTNoNjF5NDczM3A4eHFuMTBiMXgifQ.LJoaUT85C0dkAZDNYjhRYQ';
+
+export function fetchTripRoute(trip_coordinates) {
+  const request = axios.get(
+    `${baseURL}/${trip_coordinates.start_station.lng},${trip_coordinates.start_station.lat};${trip_coordinates.end_station.lng},${trip_coordinates.end_station.lat}?access_token=${accessToken}&geometries=geojson`
+  );
+
+  return {
+    type: FETCH_ROUTE,
+    payload: request
+  }
+};

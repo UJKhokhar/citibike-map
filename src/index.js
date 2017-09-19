@@ -4,15 +4,20 @@ import {Provider} from 'react-redux';
 import {createStore, applyMiddleware} from 'redux';
 import promiseMiddleware from 'redux-promise';
 
-import Map from './components/map';
-import Map2 from './components/map2';
+import Map from './components/map2';
+import TripMap from './components/trip_map';
+import TimeSlider from './components/timeslider';
+
 import reducers from './reducers';
 
 const createStoreWithMiddleware = applyMiddleware(promiseMiddleware)(createStore);
 
 ReactDOM.render(
   <Provider store={createStoreWithMiddleware(reducers)}>
-    <Map2 />
+    <div>
+      <TripMap />
+      <TimeSlider />
+    </div>
   </Provider>
   , document.querySelector('.container')
 );

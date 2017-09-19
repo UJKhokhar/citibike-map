@@ -1,5 +1,6 @@
 import { FETCH_STATIONS } from '../actions';
 import { FETCH_STATION_STATUS } from '../actions';
+import { TEST_ACTION } from '../actions';
 
 export default function(state = {}, action) {
   switch(action.type) {
