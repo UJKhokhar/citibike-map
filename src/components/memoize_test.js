@@ -8,15 +8,27 @@ import {convertTimeToMinutes} from '../utilities/convert_time';
 var memoize = require('memoizee');
 import json from '../../tripdata.json';
 
+// Map Stuff
+import ReactMapboxGl, { GeoJSONLayer } from "react-mapbox-gl";
+
+const Map = ReactMapboxGl({
+  accessToken: "pk.eyJ1IjoidW1vIiwiYSI6ImNqNjU0bTNoNjF5NDczM3A4eHFuMTBiMXgifQ.LJoaUT85C0dkAZDNYjhRYQ"
+});
+
+// Class Stuff
 class Test extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      num: 0
+      num: 0,
+      center: [-74.0059, 40.7128],
+      zoom: [11]
     };
 
     this.handleClick = this.handleClick.bind(this);
+
+    // Memoize so that we don't make the same request twice
     this.memoized = memoize(this.props.fetchTripRoute, { primitive: true, normalizer: function(args) {
       return JSON.stringify(args[0]);
     }});
@@ -30,8 +42,6 @@ class Test extends Component {
       )
     });
 
-    console.log("Trips", trips);
-
     var trips_coordinates = _.map(trips, (trip) => {
       var requested_trip = {
         start_station: {
@@ -44,8 +54,6 @@ class Test extends Component {
         }
       };
 
-      console.log('REQUESTED_TRIP', requested_trip);
-
       this.memoized(requested_trip);
       return requested_trip;
     });
@@ -53,22 +61,67 @@ class Test extends Component {
 
   handleClick() {
     this.fetchRoutes();
-
     this.setState({num: this.state.num + 1});
   }
 
+  renderPaths() {
+    return _.map(this.props.routes, (coords) => {
+      var obj = {
+        "type": "Feature",
+        "geometry": {
+          "type": "LineString",
+          "coordinates": coords
+        }
+      }
+
+      return obj;
+    });
+  }
+
   render() {
-    console.log('num:', this.state.num)
     return (
-      <div onClick={this.handleClick}>
-        Hi
+      <div>
+        <div onClick={this.handleClick}>
+          CLICK ME
+        </div>
+        <Map
+          accessToken="pk.eyJ1IjoidW1vIiwiYSI6ImNqNjU0bTNoNjF5NDczM3A4eHFuMTBiMXgifQ.LJoaUT85C0dkAZDNYjhRYQ"
+          style="mapbox://styles/mapbox/streets-v9"
+          center={this.state.center}
+          zoom={this.state.zoom}
+          containerStyle={{
+            height: "100vh",
+            width: "100vw"
+          }}>
+          {
+            !_.isEmpty(this.props.routes) && (
+              <GeoJSONLayer
+                data={{
+                  "type": "FeatureCollection",
+                  "features": this.renderPaths()
+                }}
+                lineLayout={{
+                  "line-cap": "round"
+                }}
+                linePaint={{
+                  "line-width": 6,
+                  "line-color": "#FA3C00"
+                }}
+              />
+            )
+          }
+        </Map>
       </div>
     )
   }
+}
+
+function mapStateToProps({routes}) {
+  return {routes};
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({fetchTripRoute}, dispatch);
 }
 
-export default connect(null, mapDispatchToProps)(Test);
+export default connect(mapStateToProps, mapDispatchToProps)(Test);
