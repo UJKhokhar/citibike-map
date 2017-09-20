@@ -7,6 +7,8 @@ import 'react-rangeslider/lib/index.scss';
 import {convertTimeToMinutes} from '../utilities/convert_time';
 import _ from 'lodash';
 
+var memoize = require('memoizee');
+
 import json from '../../tripdata.json';
 
 class TimeSlider extends Component {
@@ -25,7 +27,11 @@ class TimeSlider extends Component {
     })
   }
 
-  componentDidMount() {
+  componentWillMount() {
+
+  }
+
+  fetchRoutes() {
     var trips = _.filter(json, (o) => {
       return (
         convertTimeToMinutes(o.starttime) <= this.state.time &&
@@ -48,19 +54,18 @@ class TimeSlider extends Component {
       this.props.fetchTripRoute(requested_trip);
       return requested_trip;
     });
-
-    console.log('Did mount', trips_coordinates);
-
   }
 
   render() {
-    console.log("Render", this.props.routes);
+    this.fetchRoutes();
+
+    console.log("We're rendering. These are the routes:", this.props.routes);
     let {time} = this.state
     return (
       <Slider
         value={time}
         min={0}
-        max={1440}
+        max={4}
         onChange={this.handleOnChange}
       />
     )
@@ -72,7 +77,7 @@ function mapStateToProps({routes}) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ fetchTripRoute: fetchTripRoute}, dispatch);
+  return bindActionCreators({ fetchTripRoute: memoize(fetchTripRoute, { promise: true }, { profileName: 'Fetch Route' })}, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TimeSlider);

@@ -36,3 +36,14 @@ export function fetchTripRoute(trip_coordinates) {
     payload: request
   }
 };
+
+export function testMemoize(obj) {
+  console.log('HITTING', obj);
+
+  return {
+    type: 'TEST_MEMOIZE',
+    payload: {
+      obj: obj
+    }
+  }
+}
