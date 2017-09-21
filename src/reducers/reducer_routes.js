@@ -4,9 +4,13 @@ export default function(state = {}, action) {
   switch(action.type) {
     case FETCH_ROUTE:
       const routes = action.payload.data;
-      return { ...state, [routes.uuid]: routes.routes[0].geometry.coordinates };
-    case 'TEST_MEMOIZE':
-      console.log('WE IN THE DISPATCHER');
+      console.log("payload", action);
+      return { ...state, [routes.uuid]: {
+          coords: routes.routes[0].geometry.coordinates,
+          start_time: action.meta.start_time,
+          stop_time: action.meta.stop_time
+        }
+      };
     default:
       return state;
   }

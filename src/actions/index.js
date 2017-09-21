@@ -26,24 +26,17 @@ export const FETCH_ROUTE = 'FETCH_ROUTE';
 const baseURL = 'https://api.mapbox.com/directions/v5/mapbox/cycling';
 const accessToken = 'pk.eyJ1IjoidW1vIiwiYSI6ImNqNjU0bTNoNjF5NDczM3A4eHFuMTBiMXgifQ.LJoaUT85C0dkAZDNYjhRYQ';
 
-export function fetchTripRoute(trip_coordinates) {
+export function fetchTripRoute(trip) {
   const request = axios.get(
-    `${baseURL}/${trip_coordinates.start_station.lng},${trip_coordinates.start_station.lat};${trip_coordinates.end_station.lng},${trip_coordinates.end_station.lat}?access_token=${accessToken}&geometries=geojson`
+    `${baseURL}/${trip.start_station.lng},${trip.start_station.lat};${trip.end_station.lng},${trip.end_station.lat}?access_token=${accessToken}&geometries=geojson`
   );
 
   return {
     type: FETCH_ROUTE,
-    payload: request
-  }
-};
-
-export function testMemoize(obj) {
-  console.log('HITTING', obj);
-
-  return {
-    type: 'TEST_MEMOIZE',
-    payload: {
-      obj: obj
+    payload: request,
+    meta: {
+      start_time: trip.start_time,
+      stop_time: trip.stop_time
     }
   }
-}
+};

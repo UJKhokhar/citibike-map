@@ -44,6 +44,8 @@ class Test extends Component {
 
     var trips_coordinates = _.map(trips, (trip) => {
       var requested_trip = {
+        start_time: convertTimeToMinutes(trip.starttime),
+        stop_time: convertTimeToMinutes(trip.stoptime),
         start_station: {
           lng: trip["start station longitude"],
           lat: trip["start station latitude"]
@@ -54,9 +56,13 @@ class Test extends Component {
         }
       };
 
+      console.log(requested_trip);
+
       this.memoized(requested_trip);
       return requested_trip;
     });
+
+    console.log("Requested trips", trips_coordinates);
   }
 
   handleClick() {
@@ -65,20 +71,29 @@ class Test extends Component {
   }
 
   renderPaths() {
-    return _.map(this.props.routes, (coords) => {
-      var obj = {
-        "type": "Feature",
-        "geometry": {
-          "type": "LineString",
-          "coordinates": coords
-        }
-      }
-
-      return obj;
+    console.log("Routes:", this.props.routes);
+    var active_trips = _.filter(this.props.routes, (trip) => {
+      return (trip.start_time <=  this.state.num && trip.stop_time >= this.state.num)
     });
+
+
+    var geo_array = _.map(active_trips, (trip) => {
+        var obj = {
+          "type": "Feature",
+          "geometry": {
+            "type": "LineString",
+            "coordinates": trip.coords
+          }
+        }
+        return obj;
+    });
+
+    console.log(geo_array);
+    return geo_array;
   }
 
   render() {
+    console.log("num:", this.state.num);
     return (
       <div>
         <div onClick={this.handleClick}>
