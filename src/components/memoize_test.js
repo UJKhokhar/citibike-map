@@ -7,6 +7,7 @@ import { fetchTripRoute } from '../actions';
 import {convertTimeToMinutes} from '../utilities/convert_time';
 var memoize = require('memoizee');
 import json from '../../tripdata.json';
+import TimeSlider from '../components/timeslider.js';
 
 // Map Stuff
 import ReactMapboxGl, { GeoJSONLayer } from "react-mapbox-gl";
@@ -21,12 +22,10 @@ class Test extends Component {
     super(props);
 
     this.state = {
-      num: 0,
+      time: 0,
       center: [-74.0059, 40.7128],
       zoom: [11]
     };
-
-    this.handleClick = this.handleClick.bind(this);
 
     // Memoize so that we don't make the same request twice
     this.memoized = memoize(this.props.fetchTripRoute, { primitive: true, normalizer: function(args) {
@@ -37,8 +36,8 @@ class Test extends Component {
   fetchRoutes() {
     var trips = _.filter(json, (o) => {
       return (
-        convertTimeToMinutes(o.starttime) <= this.state.num &&
-        convertTimeToMinutes(o.stoptime) >= this.state.num
+        convertTimeToMinutes(o.starttime) <= this.state.time &&
+        convertTimeToMinutes(o.stoptime) >= this.state.time
       )
     });
 
@@ -56,24 +55,23 @@ class Test extends Component {
         }
       };
 
-      console.log(requested_trip);
-
       this.memoized(requested_trip);
       return requested_trip;
     });
-
-    console.log("Requested trips", trips_coordinates);
   }
 
-  handleClick() {
+  handleChange = (value) => {
     this.fetchRoutes();
-    this.setState({num: this.state.num + 1});
+    this.setState({
+      time: value
+    });
   }
+
+
 
   renderPaths() {
-    console.log("Routes:", this.props.routes);
     var active_trips = _.filter(this.props.routes, (trip) => {
-      return (trip.start_time <=  this.state.num && trip.stop_time >= this.state.num)
+      return (trip.start_time <=  this.state.time && trip.stop_time >= this.state.time)
     });
 
 
@@ -88,17 +86,12 @@ class Test extends Component {
         return obj;
     });
 
-    console.log(geo_array);
     return geo_array;
   }
 
   render() {
-    console.log("num:", this.state.num);
     return (
       <div>
-        <div onClick={this.handleClick}>
-          CLICK ME
-        </div>
         <Map
           accessToken="pk.eyJ1IjoidW1vIiwiYSI6ImNqNjU0bTNoNjF5NDczM3A4eHFuMTBiMXgifQ.LJoaUT85C0dkAZDNYjhRYQ"
           style="mapbox://styles/mapbox/streets-v9"
@@ -126,6 +119,7 @@ class Test extends Component {
             )
           }
         </Map>
+        <TimeSlider value={this.state.time} onChange={this.handleChange}/>
       </div>
     )
   }

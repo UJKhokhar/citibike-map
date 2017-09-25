@@ -4,7 +4,6 @@ export default function(state = {}, action) {
   switch(action.type) {
     case FETCH_ROUTE:
       const routes = action.payload.data;
-      console.log("payload", action);
       return { ...state, [routes.uuid]: {
           coords: routes.routes[0].geometry.coordinates,
           start_time: action.meta.start_time,
