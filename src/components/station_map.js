@@ -8,7 +8,7 @@ const Map = ReactMapboxGl({
   accessToken: "pk.eyJ1IjoidW1vIiwiYSI6ImNqNjU0bTNoNjF5NDczM3A4eHFuMTBiMXgifQ.LJoaUT85C0dkAZDNYjhRYQ"
 });
 
-class Map2 extends Component {
+class StationMap extends Component {
   constructor(props) {
     super(props);
 
@@ -64,7 +64,6 @@ class Map2 extends Component {
   render() {
     return (
       <Map
-        accessToken="pk.eyJ1IjoidW1vIiwiYSI6ImNqNjU0bTNoNjF5NDczM3A4eHFuMTBiMXgifQ.LJoaUT85C0dkAZDNYjhRYQ"
         style="mapbox://styles/mapbox/streets-v9"
         center={this.state.center}
         zoom={this.state.zoom}
@@ -99,4 +98,4 @@ function mapStateToProps({stations}) {
   return {stations};
 }
 
-export default connect(mapStateToProps, {fetchStations, fetchStationStatus})(Map2);
+export default connect(mapStateToProps, {fetchStations, fetchStationStatus})(StationMap);
