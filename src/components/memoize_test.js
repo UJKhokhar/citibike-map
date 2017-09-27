@@ -41,23 +41,9 @@ class Test extends Component {
       )
     });
 
-    var trips_coordinates = _.map(trips, (trip) => {
-      var requested_trip = {
-        start_time: convertTimeToMinutes(trip.starttime),
-        stop_time: convertTimeToMinutes(trip.stoptime),
-        start_station: {
-          lng: trip["start station longitude"],
-          lat: trip["start station latitude"]
-        },
-        end_station: {
-          lng: trip["end station longitude"],
-          lat: trip["end station latitude"]
-        }
-      };
-
-      this.memoized(requested_trip);
-      return requested_trip;
-    });
+    for (var i = 0; i < trips.length; i++) {
+      this.memoized(trips[i]);
+    }
   }
 
   handleChange = (value) => {
@@ -67,13 +53,10 @@ class Test extends Component {
     });
   }
 
-
-
   renderPaths() {
     var active_trips = _.filter(this.props.routes, (trip) => {
-      return (trip.start_time <=  this.state.time && trip.stop_time >= this.state.time)
+      return (convertTimeToMinutes(trip.trip.starttime) <=  this.state.time && convertTimeToMinutes(trip.trip.stoptime) >= this.state.time)
     });
-
 
     var geo_array = _.map(active_trips, (trip) => {
         var obj = {

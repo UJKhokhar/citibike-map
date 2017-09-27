@@ -63,7 +63,7 @@ class TripMap extends Component {
             "line-cap": "round"
           }}
           linePaint={{
-            "line-width": 6,
+            "line-width": 4,
             "line-color": "#FA3C00"
           }}
         />

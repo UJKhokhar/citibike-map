@@ -6,8 +6,7 @@ export default function(state = {}, action) {
       const routes = action.payload.data;
       return { ...state, [routes.uuid]: {
           coords: routes.routes[0].geometry.coordinates,
-          start_time: action.meta.start_time,
-          stop_time: action.meta.stop_time
+          trip: action.meta.trip
         }
       };
     default:
