@@ -10,7 +10,7 @@ import json from '../../tripdata.json';
 import TimeSlider from '../components/timeslider.js';
 
 // Map Stuff
-import ReactMapboxGl, { GeoJSONLayer } from "react-mapbox-gl";
+import ReactMapboxGl, { GeoJSONLayer, Layer, Feature } from "react-mapbox-gl";
 
 const Map = ReactMapboxGl({
   accessToken: "pk.eyJ1IjoidW1vIiwiYSI6ImNqNjU0bTNoNjF5NDczM3A4eHFuMTBiMXgifQ.LJoaUT85C0dkAZDNYjhRYQ"
@@ -72,6 +72,37 @@ class Test extends Component {
     return geo_array;
   }
 
+  renderStartStations() {
+    console.log(this.props.routes);
+    var active_trips = _.filter(this.props.routes, (trip) => {
+      return (convertTimeToMinutes(trip.trip.starttime) <=  this.state.time && convertTimeToMinutes(trip.trip.stoptime) >= this.state.time)
+    });
+
+    return _.map(active_trips, (trip) => {
+      return (
+        <Feature
+          key={trip.trip["start station id"]}
+          coordinates={[trip.trip["start station longitude"], trip.trip["start station latitude"]]}
+        />
+      )
+    });
+  }
+
+  renderEndStations() {
+    var active_trips = _.filter(this.props.routes, (trip) => {
+      return (convertTimeToMinutes(trip.trip.starttime) <=  this.state.time && convertTimeToMinutes(trip.trip.stoptime) >= this.state.time)
+    });
+
+    return _.map(active_trips, (trip) => {
+      return (
+        <Feature
+          key={trip.trip["end station id"]}
+          coordinates={[trip.trip["end station longitude"], trip.trip["end station latitude"]]}
+        />
+      )
+    });
+  }
+
   render() {
     return (
       <div>
@@ -86,19 +117,33 @@ class Test extends Component {
           }}>
           {
             !_.isEmpty(this.props.routes) && (
-              <GeoJSONLayer
-                data={{
-                  "type": "FeatureCollection",
-                  "features": this.renderPaths()
-                }}
-                lineLayout={{
-                  "line-cap": "round"
-                }}
-                linePaint={{
-                  "line-width": 6,
-                  "line-color": "#FA3C00"
-                }}
-              />
+              <div>
+                <Layer
+                  type="symbol"
+                  id="startstation"
+                  layout={{ "icon-image": "bicycle-share-15" }}>
+                  {this.renderStartStations()}
+                </Layer>
+                <Layer
+                  type="symbol"
+                  id="endstation"
+                  layout={{ "icon-image": "circle-15" }}>
+                  {this.renderEndStations()}
+                </Layer>
+                <GeoJSONLayer
+                  data={{
+                    "type": "FeatureCollection",
+                    "features": this.renderPaths()
+                  }}
+                  lineLayout={{
+                    "line-cap": "round"
+                  }}
+                  linePaint={{
+                    "line-width": 6,
+                    "line-color": "#FA3C00"
+                  }}
+                />
+            </div>
             )
           }
         </Map>
