@@ -1,31 +1,39 @@
 const path = require('path');
 const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const VENDOR_LIBS = [
+  'axios',
+  // Want to add this but unresolved errors 'csvtojson',
+  'lodash',
+  'mapbox-gl',
+  'memoizee',
   'react',
   'react-dom',
+  'react-mapbox-gl',
+  'react-rangeslider',
   'react-redux',
   'react-router',
-  'redux'
+  'redux',
+  'redux-promise',
 ];
 
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const extractSass = new ExtractTextPlugin({
   filename: '[name].[contenthash].css',
-  disable: process.env.NODE_END === 'development'
-})
+  disable: process.env.NODE_END === 'development',
+});
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const config = {
   entry: {
     bundle: './src/index.js',
-    vendor: VENDOR_LIBS
+    vendor: VENDOR_LIBS,
   },
 
   output: {
     path: path.resolve(__dirname, 'build'),
-    filename: '[name].[chunkhash].js'
+    filename: '[name].[chunkhash].js',
   },
 
   module: {
@@ -33,7 +41,7 @@ const config = {
       {
         use: 'babel-loader',
         test: /\.js$/,
-        exclude: /node_modules/
+        exclude: /node_modules/,
       },
       {
         test: /\.scss$/,
@@ -41,30 +49,30 @@ const config = {
           use: [{
             loader: 'css-loader',
           }, {
-            loader: 'sass-loader'
+            loader: 'sass-loader',
           }],
-          fallback: 'style-loader'
-        })
-    }]
+          fallback: 'style-loader',
+        }),
+      }],
   },
 
   resolve: {
     alias: {
       // From mapbox-gl-js README. Required for non-browserify bundlers (e.g. webpack):
-      'mapbox-gl$': path.resolve('./node_modules/mapbox-gl/dist/mapbox-gl.js')
-    }
+      'mapbox-gl$': path.resolve('./node_modules/mapbox-gl/dist/mapbox-gl.js'),
+    },
   },
 
   plugins: [
     extractSass,
     new HtmlWebpackPlugin({
-      template: './index.html'
+      template: './index.html',
     }),
     new webpack.optimize.CommonsChunkPlugin({
-      name: ['vendor', 'manifest']
+      name: ['vendor', 'manifest'],
     }),
-    new webpack.EnvironmentPlugin(['MapboxAccessToken'])
-  ]
+    new webpack.EnvironmentPlugin(['MapboxAccessToken']),
+  ],
 };
 
 module.exports = config;

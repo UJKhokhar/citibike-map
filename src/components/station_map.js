@@ -1,12 +1,23 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {fetchStations, fetchStationStatus} from '../actions';
-import ReactMapboxGl, { Layer, Feature, Popup } from "react-mapbox-gl";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import ReactMapboxGl, { Layer, Feature, Popup } from 'react-mapbox-gl';
 import _ from 'lodash';
+import PropTypes from 'prop-types';
+import { fetchStations, fetchStationStatus } from '../actions';
 
 const Map = ReactMapboxGl({
-  accessToken: "pk.eyJ1IjoidW1vIiwiYSI6ImNqNjU0bTNoNjF5NDczM3A4eHFuMTBiMXgifQ.LJoaUT85C0dkAZDNYjhRYQ"
+  accessToken: 'pk.eyJ1IjoidW1vIiwiYSI6ImNqNjU0bTNoNjF5NDczM3A4eHFuMTBiMXgifQ.LJoaUT85C0dkAZDNYjhRYQ',
 });
+
+const propTypes = {
+  fetchStations: PropTypes.func.isRequired,
+  fetchStationStatus: PropTypes.func.isRequired,
+  stations: PropTypes.arrayOf(PropTypes.object),
+};
+
+const defaultProps = {
+  stations: [{}],
+};
 
 class StationMap extends Component {
   constructor(props) {
@@ -15,8 +26,9 @@ class StationMap extends Component {
     this.state = {
       center: [-74.0059, 40.7128],
       zoom: [11],
-      station: null
-    }
+      station: null,
+      style: 'mapbox://styles/mapbox/streets-v9',
+    };
   }
 
   componentWillMount() {
@@ -25,7 +37,7 @@ class StationMap extends Component {
   }
 
   stationClick = (station) => {
-    var status = this.getStationStatus(station);
+    const status = this.getStationStatus(station);
 
     this.setState({
       center: [station.lon, station.lat],
@@ -36,19 +48,20 @@ class StationMap extends Component {
         lat: station.lat,
         lon: station.lon,
         bikes_available: status.num_bikes_available,
-        docks_available: status.num_docks_available
-      }
-    })
+        docks_available: status.num_docks_available,
+      },
+    });
   }
 
   renderStations() {
-    return _.map(this.props.stations.stations, station => {
+    return _.map(this.props.stations.stations, (station) => {
       return (
         <Feature
           key={station.station_id}
           coordinates={[station.lon, station.lat]}
-          onClick={this.stationClick.bind(this, station)}/>
-      )
+          onClick={this.stationClick.bind(this, station)}
+        />
+      );
     });
   }
 
@@ -64,38 +77,44 @@ class StationMap extends Component {
   render() {
     return (
       <Map
-        style="mapbox://styles/mapbox/streets-v9"
+        style={this.state.style}
         center={this.state.center}
         zoom={this.state.zoom}
         containerStyle={{
-          height: "100vh",
-          width: "100vw"
-        }}>
-          <Layer
-            type="symbol"
-            id="station"
-            layout={{ "icon-image": "bicycle-share-15" }}>
-            {this.renderStations()}
-          </Layer>
-          {
-            this.state.station != null && (
-              <Popup
-                key={this.state.station.station_id}
-                offset={[0, -50]}
-                coordinates={[this.state.station.lon, this.state.station.lat]}>
-                  <div>{this.state.station.name}</div>
-                  <div>Bikes: {this.state.station.bikes_available}</div>
-                  <div>Docks: {this.state.station.docks_available}</div>
-              </Popup>
-            )
-          }
+          height: '100vh',
+          width: '100vw',
+        }}
+      >
+        <Layer
+          type="symbol"
+          id="station"
+          layout={{ 'icon-image': 'bicycle-share-15' }}
+        >
+          {this.renderStations()}
+        </Layer>
+        {
+          this.state.station != null && (
+            <Popup
+              key={this.state.station.station_id}
+              offset={[0, -50]}
+              coordinates={[this.state.station.lon, this.state.station.lat]}
+            >
+              <div>{this.state.station.name}</div>
+              <div>Bikes: {this.state.station.bikes_available}</div>
+              <div>Docks: {this.state.station.docks_available}</div>
+            </Popup>
+          )
+        }
       </Map>
-    )
+    );
   }
 }
 
-function mapStateToProps({stations}) {
-  return {stations};
+StationMap.propTypes = propTypes;
+StationMap.defaultProps = defaultProps;
+
+function mapStateToProps({ stations }) {
+  return { stations };
 }
 
-export default connect(mapStateToProps, {fetchStations, fetchStationStatus})(StationMap);
+export default connect(mapStateToProps, { fetchStations, fetchStationStatus })(StationMap);

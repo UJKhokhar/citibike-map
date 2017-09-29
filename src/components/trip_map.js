@@ -1,19 +1,17 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import _ from 'lodash';
+import ReactMapboxGl, { GeoJSONLayer, Layer, Feature } from 'react-mapbox-gl';
 import { fetchTripRoute } from '../actions';
-import {convertTimeToMinutes} from '../utilities/convert_time';
-var memoize = require('memoizee');
+import { convertTimeToMinutes } from '../utilities/convert_time';
 import json from '../../tripdata.json';
-import TimeSlider from '../components/timeslider.js';
+import TimeSlider from '../components/timeslider';
 
-// Map Stuff
-import ReactMapboxGl, { GeoJSONLayer, Layer, Feature } from "react-mapbox-gl";
+const memoize = require('memoizee');
 
 const Map = ReactMapboxGl({
-  accessToken: "pk.eyJ1IjoidW1vIiwiYSI6ImNqNjU0bTNoNjF5NDczM3A4eHFuMTBiMXgifQ.LJoaUT85C0dkAZDNYjhRYQ"
+  accessToken: 'pk.eyJ1IjoidW1vIiwiYSI6ImNqNjU0bTNoNjF5NDczM3A4eHFuMTBiMXgifQ.LJoaUT85C0dkAZDNYjhRYQ',
 });
 
 // Class Stuff
@@ -24,7 +22,7 @@ class TripMap extends Component {
     this.state = {
       time: 0,
       center: [-74.0059, 40.7128],
-      zoom: [11]
+      zoom: [11],
     };
 
     // Memoize so that we don't make the same request twice
@@ -34,7 +32,7 @@ class TripMap extends Component {
   }
 
   fetchRoutes() {
-    var trips = _.filter(json, (o) => {
+    const trips = _.filter(json, (o) => {
       return (
         convertTimeToMinutes(o.starttime) <= this.state.time &&
         convertTimeToMinutes(o.stoptime) >= this.state.time
@@ -110,8 +108,8 @@ class TripMap extends Component {
           center={this.state.center}
           zoom={this.state.zoom}
           containerStyle={{
-            height: "100vh",
-            width: "100vw"
+            height: '100vh',
+            width: '100vw'
           }}>
           {
             !_.isEmpty(this.props.routes) && (
@@ -119,13 +117,15 @@ class TripMap extends Component {
                 <Layer
                   type="symbol"
                   id="startstation"
-                  layout={{ "icon-image": "bicycle-share-15" }}>
+                  layout={{ 'icon-image': 'bicycle-share-15' }}
+                >
                   {this.renderStartStations()}
                 </Layer>
                 <Layer
                   type="symbol"
                   id="endstation"
-                  layout={{ "icon-image": "circle-15" }}>
+                  layout={{ "icon-image": "circle-15" }}
+                >
                   {this.renderEndStations()}
                 </Layer>
                 <GeoJSONLayer
@@ -141,22 +141,22 @@ class TripMap extends Component {
                     "line-color": "#FA3C00"
                   }}
                 />
-            </div>
+              </div>
             )
           }
         </Map>
-        <TimeSlider value={this.state.time} onChange={this.handleChange}/>
+        <TimeSlider value={this.state.time} onChange={this.handleChange} />
       </div>
-    )
+    );
   }
 }
 
-function mapStateToProps({routes}) {
-  return {routes};
+function mapStateToProps({ routes }) {
+  return { routes };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({fetchTripRoute}, dispatch);
+  return bindActionCreators({ fetchTripRoute }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TripMap);
