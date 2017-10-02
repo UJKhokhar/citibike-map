@@ -52,45 +52,54 @@ class TripMap extends Component {
   }
 
   renderPaths() {
-    var active_trips = _.filter(this.props.routes, (trip) => {
-      return (convertTimeToMinutes(trip.trip.starttime) <=  this.state.time && convertTimeToMinutes(trip.trip.stoptime) >= this.state.time)
+    const activeTrips = _.filter(this.props.routes, (trip) => {
+      return (
+        convertTimeToMinutes(trip.trip.starttime) <= this.state.time &&
+        convertTimeToMinutes(trip.trip.stoptime) >= this.state.time
+      );
     });
 
-    var geo_array = _.map(active_trips, (trip) => {
-        var obj = {
-          "type": "Feature",
-          "geometry": {
-            "type": "LineString",
-            "coordinates": trip.coords
-          }
-        }
-        return obj;
+    const geoArray = _.map(activeTrips, (trip) => {
+      const obj = {
+        type: 'Feature',
+        geometry: {
+          type: 'LineString',
+          coordinates: trip.coords,
+        },
+      };
+      return obj;
     });
 
-    return geo_array;
+    return geoArray;
   }
 
   renderStartStations() {
-    var active_trips = _.filter(this.props.routes, (trip) => {
-      return (convertTimeToMinutes(trip.trip.starttime) <=  this.state.time && convertTimeToMinutes(trip.trip.stoptime) >= this.state.time)
+    const activeTrips = _.filter(this.props.routes, (trip) => {
+      return (
+        convertTimeToMinutes(trip.trip.starttime) <= this.state.time &&
+        convertTimeToMinutes(trip.trip.stoptime) >= this.state.time
+      );
     });
 
-    return _.map(active_trips, (trip) => {
+    return _.map(activeTrips, (trip) => {
       return (
         <Feature
-          key={trip.trip["start station id"]}
-          coordinates={[trip.trip["start station longitude"], trip.trip["start station latitude"]]}
+          key={trip.trip['start station id']}
+          coordinates={[
+            trip.trip['start station longitude'],
+            trip.trip['start station latitude']
+          ]}
         />
       )
     });
   }
 
   renderEndStations() {
-    var active_trips = _.filter(this.props.routes, (trip) => {
+    var activeTrips = _.filter(this.props.routes, (trip) => {
       return (convertTimeToMinutes(trip.trip.starttime) <=  this.state.time && convertTimeToMinutes(trip.trip.stoptime) >= this.state.time)
     });
 
-    return _.map(active_trips, (trip) => {
+    return _.map(activeTrips, (trip) => {
       return (
         <Feature
           key={trip.trip["end station id"]}

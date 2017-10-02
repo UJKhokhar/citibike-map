@@ -40,7 +40,7 @@ const config = {
     rules: [
       {
         use: 'babel-loader',
-        test: /\.js$/,
+        test: /\.jsx?$/,
         exclude: /node_modules/,
       },
       {
@@ -61,6 +61,7 @@ const config = {
       // From mapbox-gl-js README. Required for non-browserify bundlers (e.g. webpack):
       'mapbox-gl$': path.resolve('./node_modules/mapbox-gl/dist/mapbox-gl.js'),
     },
+    extensions: ['.js', '.jsx'],
   },
 
   plugins: [

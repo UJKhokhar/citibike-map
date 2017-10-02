@@ -12,7 +12,10 @@ const Map = ReactMapboxGl({
 const propTypes = {
   fetchStations: PropTypes.func.isRequired,
   fetchStationStatus: PropTypes.func.isRequired,
-  stations: PropTypes.arrayOf(PropTypes.object),
+  stations: PropTypes.shape({
+    station_status: PropTypes.array,
+    stations: PropTypes.array,
+  }),
 };
 
 const defaultProps = {
@@ -36,6 +39,15 @@ class StationMap extends Component {
     this.props.fetchStationStatus();
   }
 
+  getStationStatus(activeStation) {
+    return _.find(
+      this.props.stations.station_status,
+      (station) => {
+        return station.station_id === activeStation.station_id;
+      }
+    );
+  }
+
   stationClick = (station) => {
     const status = this.getStationStatus(station);
 
@@ -54,24 +66,13 @@ class StationMap extends Component {
   }
 
   renderStations() {
-    return _.map(this.props.stations.stations, (station) => {
-      return (
-        <Feature
-          key={station.station_id}
-          coordinates={[station.lon, station.lat]}
-          onClick={this.stationClick.bind(this, station)}
-        />
-      );
-    });
-  }
-
-  getStationStatus(activeStation) {
-    return _.find(
-      this.props.stations.station_status,
-      (station) => {
-        return station.station_id === activeStation.station_id;
-      }
-    );
+    return _.map(this.props.stations.stations, station => (
+      <Feature
+        key={station.station_id}
+        coordinates={[station.lon, station.lat]}
+        onClick={this.stationClick.bind(this, station)}
+      />
+    ));
   }
 
   render() {

@@ -1,15 +1,18 @@
-import React, { Component } from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import {fetchTripRoute} from '../actions';
+import React, { PureComponent } from 'react';
 import Slider from 'react-rangeslider';
 import 'react-rangeslider/lib/index.scss';
-import {convertTimeToMinutes} from '../utilities/convert_time';
-import _ from 'lodash';
+import PropTypes from 'prop-types';
 
-import json from '../../tripdata.json';
+const propTypes = {
+  value: PropTypes.func.number,
+};
 
-export default class TimeSlider extends Component {
+const defaultProps = {
+  value: 0,
+};
+
+
+export default class TimeSlider extends PureComponent {
   render() {
     return (
       <Slider
@@ -21,3 +24,6 @@ export default class TimeSlider extends Component {
     )
   }
 }
+
+TimeSlider.propTypes = propTypes;
+TimeSlider.defaultProps = defaultProps;

@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import promiseMiddleware from 'redux-promise';
 
-import StationMap from './components/station_map';
+import StationMap from './components/StationMap';
 // import TripMap from './components/trip_map';
 import reducers from './reducers';
 
