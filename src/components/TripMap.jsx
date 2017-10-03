@@ -12,7 +12,7 @@ import TimeSlider from '../components/TimeSlider';
 const memoize = require('memoizee');
 
 const Map = ReactMapboxGl({
-  accessToken: 'pk.eyJ1IjoidW1vIiwiYSI6ImNqNjU0bTNoNjF5NDczM3A4eHFuMTBiMXgifQ.LJoaUT85C0dkAZDNYjhRYQ',
+  accessToken: process.env.MAPBOX_API_KEY,
 });
 
 const propTypes = {

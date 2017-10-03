@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 
 const VENDOR_LIBS = [
   'axios',
@@ -72,7 +73,7 @@ const config = {
     new webpack.optimize.CommonsChunkPlugin({
       name: ['vendor', 'manifest'],
     }),
-    new webpack.EnvironmentPlugin(['MapboxAccessToken']),
+    new Dotenv(),
   ],
 };
 

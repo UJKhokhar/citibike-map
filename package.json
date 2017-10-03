@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rimraf build",
     "build": "npm run clean && webpack",
-    "start": "MapboxAccessToken=pk.eyJ1IjoidW1vIiwiYSI6ImNqNjU0bTNoNjF5NDczM3A4eHFuMTBiMXgifQ.LJoaUT85C0dkAZDNYjhRYQ webpack-dev-server",
+    "start": "webpack-dev-server",
     "create-trip-data": "node src/csv.js"
   },
   "author": "",
@@ -38,6 +38,7 @@
   "dependencies": {
     "axios": "^0.16.2",
     "csvtojson": "^1.1.7",
+    "dotenv-webpack": "^1.5.4",
     "lodash": "^4.17.4",
     "mapbox-gl": "^0.39.1",
     "memoizee": "^0.4.11",

@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { fetchStations, fetchStationStatus } from '../actions';
 
 const Map = ReactMapboxGl({
-  accessToken: 'pk.eyJ1IjoidW1vIiwiYSI6ImNqNjU0bTNoNjF5NDczM3A4eHFuMTBiMXgifQ.LJoaUT85C0dkAZDNYjhRYQ',
+  accessToken: process.env.MAPBOX_API_KEY,
 });
 
 const propTypes = {

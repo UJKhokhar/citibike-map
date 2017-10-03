@@ -1,5 +1,5 @@
-export function convertTimeToMinutes(time) {
-  var regex = new RegExp('([0-9]+):([0-5]?[0-9]):([0-5]?[0-9])');
-  var time_split = regex.exec(time);
-  return parseInt(time_split[1]) * 60 + parseInt(time_split[2]);
+export default function convertTimeToMinutes(time) {
+  const regex = new RegExp('([0-9]+):([0-5]?[0-9]):([0-5]?[0-9])');
+  const timeSplit = regex.exec(time);
+  return (parseInt(timeSplit[1], 10) * 60) + parseInt(timeSplit[2], 10);
 }

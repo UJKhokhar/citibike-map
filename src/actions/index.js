@@ -24,7 +24,7 @@ export function fetchStationStatus() {
 export const FETCH_ROUTE = 'FETCH_ROUTE';
 
 const baseURL = 'https://api.mapbox.com/directions/v5/mapbox/cycling';
-const accessToken = 'pk.eyJ1IjoidW1vIiwiYSI6ImNqNjU0bTNoNjF5NDczM3A4eHFuMTBiMXgifQ.LJoaUT85C0dkAZDNYjhRYQ';
+const accessToken = process.env.MAPBOX_API_KEY;
 
 export function fetchTripRoute(trip) {
   const request = axios.get(
