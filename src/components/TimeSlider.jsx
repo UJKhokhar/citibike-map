@@ -4,7 +4,8 @@ import 'react-rangeslider/lib/index.scss';
 import PropTypes from 'prop-types';
 
 const propTypes = {
-  value: PropTypes.func.number,
+  value: PropTypes.number,
+  onChange: PropTypes.func.isRequired,
 };
 
 const defaultProps = {
@@ -21,7 +22,7 @@ export default class TimeSlider extends PureComponent {
         max={11}
         onChange={this.props.onChange}
       />
-    )
+    );
   }
 }
 

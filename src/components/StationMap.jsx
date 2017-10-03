@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import ReactMapboxGl, { Layer, Feature, Popup } from 'react-mapbox-gl';
+import ReactMapboxGl, { Layer, Popup, Feature } from 'react-mapbox-gl';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import { fetchStations, fetchStationStatus } from '../actions';
@@ -40,12 +40,9 @@ class StationMap extends Component {
   }
 
   getStationStatus(activeStation) {
-    return _.find(
-      this.props.stations.station_status,
-      (station) => {
-        return station.station_id === activeStation.station_id;
-      }
-    );
+    return _.find(this.props.stations.station_status, station => (
+      station.station_id === activeStation.station_id
+    ));
   }
 
   stationClick = (station) => {
@@ -68,8 +65,9 @@ class StationMap extends Component {
   renderStations() {
     return _.map(this.props.stations.stations, station => (
       <Feature
-        key={station.station_id}
+        station={station}
         coordinates={[station.lon, station.lat]}
+        key={station.station_id}
         onClick={this.stationClick.bind(this, station)}
       />
     ));

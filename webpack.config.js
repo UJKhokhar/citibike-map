@@ -27,7 +27,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const config = {
   entry: {
-    bundle: './src/index.js',
+    bundle: './src/index.jsx',
     vendor: VENDOR_LIBS,
   },
 
