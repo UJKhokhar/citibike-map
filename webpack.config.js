@@ -56,6 +56,7 @@ const config = {
           fallback: 'style-loader',
         }),
       }],
+    noParse: /(mapbox-gl)\.js$/,
   },
 
   resolve: {
