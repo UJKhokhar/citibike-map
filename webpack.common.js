@@ -1,7 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 
 const VENDOR_LIBS = [
@@ -24,8 +24,6 @@ const extractSass = new ExtractTextPlugin({
   filename: '[name].[contenthash].css',
   disable: process.env.NODE_END === 'development',
 });
-
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const config = {
   entry: {
@@ -78,10 +76,9 @@ const config = {
     new Dotenv(),
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: JSON.stringify('production'),
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV),
       },
     }),
-    new UglifyJSPlugin(),
   ],
 };
 
