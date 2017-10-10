@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import _ from 'lodash';
-import ReactMapboxGl, { GeoJSONLayer, Layer, Feature } from 'react-mapbox-gl';
+import ReactMapboxGl, { Layer, Feature, Popup } from 'react-mapbox-gl';
 import PropTypes from 'prop-types';
 import { fetchTripRoute } from '../actions';
-import { convertTimeToMinutes } from '../utilities/convert_time';
+import convertTimeToMinutes from '../utilities/convert_time';
 import json from '../../tripdata.json';
 import TimeSlider from '../components/TimeSlider';
 
@@ -36,6 +36,7 @@ class TripMap extends Component {
       center: [-74.0059, 40.7128],
       zoom: [11],
       style: 'mapbox://styles/mapbox/streets-v9',
+      trip: null,
     };
 
     // Memoize so that we don't make the same request twice
@@ -46,6 +47,16 @@ class TripMap extends Component {
         normalizer: args => JSON.stringify(args[0]),
       },
     );
+
+    this.onMouseLeave = this.onMouseLeave.bind(this);
+  }
+
+  onMouseEnter = (trip) => {
+    this.setState({ trip });
+  }
+
+  onMouseLeave() {
+    this.setState({ trip: null });
   }
 
   fetchRoutes() {
@@ -73,18 +84,16 @@ class TripMap extends Component {
       convertTimeToMinutes(trip.trip.stoptime) >= this.state.time
     ));
 
-    const geoArray = _.map(activeTrips, (trip) => {
-      const obj = {
-        type: 'Feature',
-        geometry: {
-          type: 'LineString',
-          coordinates: trip.coords,
-        },
-      };
-      return obj;
-    });
+    const paths = _.map(activeTrips, trip => (
+      <Feature
+        key={trip.trip.bikeid}
+        coordinates={trip.coords}
+        onMouseEnter={this.onMouseEnter.bind(this, trip)}
+        onMouseLeave={this.onMouseLeave}
+      />
+    ));
 
-    return geoArray;
+    return paths;
   }
 
   renderStartStations() {
@@ -134,6 +143,14 @@ class TripMap extends Component {
             !_.isEmpty(this.props.routes) && (
               <div>
                 <Layer
+                  type="line"
+                  paint={{
+                    'line-width': 6,
+                  }}
+                >
+                  {this.renderPaths()}
+                </Layer>
+                <Layer
                   type="symbol"
                   id="startstation"
                   layout={{ 'icon-image': 'bicycle-share-15' }}
@@ -147,19 +164,20 @@ class TripMap extends Component {
                 >
                   {this.renderEndStations()}
                 </Layer>
-                <GeoJSONLayer
-                  data={{
-                    type: 'FeatureCollection',
-                    features: this.renderPaths(),
-                  }}
-                  lineLayout={{
-                    'line-cap': 'round',
-                  }}
-                  linePaint={{
-                    'line-width': 6,
-                    'line-color': '#FA3C00',
-                  }}
-                />
+                {
+                  this.state.trip != null && (
+                    <Popup
+                      key={this.state.trip.starttime}
+                      offset={[0, -50]}
+                      coordinates={this.state.trip.coords[0]}
+                    >
+                      <div>Bike ID: {this.state.trip.trip.bikeid}</div>
+                      <div>Start Station: {this.state.trip.trip['start station name']}</div>
+                      <div>End Station: {this.state.trip.trip['end station name']}</div>
+                      <div>Trip Duration: {this.state.trip.trip.tripduration}</div>
+                    </Popup>
+                  )
+                }
               </div>
             )
           }
