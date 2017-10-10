@@ -3,6 +3,8 @@ import Slider from 'react-rangeslider';
 import 'react-rangeslider/lib/index.scss';
 import PropTypes from 'prop-types';
 
+import convertMinutesToTime from '../utilities/convertMinutesToTime';
+
 const propTypes = {
   value: PropTypes.number,
   onChange: PropTypes.func.isRequired,
@@ -12,7 +14,6 @@ const defaultProps = {
   value: 0,
 };
 
-
 export default class TimeSlider extends PureComponent {
   render() {
     return (
@@ -20,6 +21,7 @@ export default class TimeSlider extends PureComponent {
         value={this.props.value}
         min={0}
         max={11}
+        format={convertMinutesToTime}
         onChange={this.props.onChange}
       />
     );
