@@ -4,10 +4,13 @@ import { bindActionCreators } from 'redux';
 import _ from 'lodash';
 import ReactMapboxGl, { Layer, Feature, Popup } from 'react-mapbox-gl';
 import PropTypes from 'prop-types';
+import moment from 'moment';
+
 import { fetchTripRoute } from '../actions';
 import convertTimeToMinutes from '../utilities/convert_time';
 import json from '../../tripdata.json';
-import TimeSlider from '../components/TimeSlider';
+import TimeSlider from './TimeSlider';
+import Calendar from './Calendar';
 
 const memoize = require('memoizee');
 
@@ -37,6 +40,7 @@ class TripMap extends Component {
       zoom: [11],
       style: 'mapbox://styles/mapbox/streets-v9',
       trip: null,
+      date: moment('07/01/17'),
     };
 
     // Memoize so that we don't make the same request twice
@@ -49,6 +53,7 @@ class TripMap extends Component {
     );
 
     this.hidePopup = this.hidePopup.bind(this);
+    this.changeDate = this.changeDate.bind(this);
   }
 
   handleClick = (trip) => {
@@ -57,6 +62,7 @@ class TripMap extends Component {
 
   fetchRoutes() {
     const trips = _.filter(json, o => (
+      moment(o.starttime).isSame(this.state.date, 'day') &&
       convertTimeToMinutes(o.starttime) <= this.state.time &&
       convertTimeToMinutes(o.stoptime) >= this.state.time
     ));
@@ -79,8 +85,15 @@ class TripMap extends Component {
     this.setState({ trip: null });
   }
 
+  changeDate(date) {
+    this.setState({
+      date,
+    });
+  }
+
   renderPaths() {
     const activeTrips = _.filter(this.props.routes, trip => (
+      moment(trip.trip.starttime).isSame(this.state.date, 'day') &&
       convertTimeToMinutes(trip.trip.starttime) <= this.state.time &&
       convertTimeToMinutes(trip.trip.stoptime) >= this.state.time
     ));
@@ -98,6 +111,7 @@ class TripMap extends Component {
 
   renderStartStations() {
     const activeTrips = _.filter(this.props.routes, trip => (
+      moment(trip.trip.starttime).isSame(this.state.date, 'day') &&
       convertTimeToMinutes(trip.trip.starttime) <= this.state.time &&
       convertTimeToMinutes(trip.trip.stoptime) >= this.state.time
     ));
@@ -115,6 +129,7 @@ class TripMap extends Component {
 
   renderEndStations() {
     const activeTrips = _.filter(this.props.routes, trip => (
+      moment(trip.trip.starttime).isSame(this.state.date, 'day') &&
       convertTimeToMinutes(trip.trip.starttime) <= this.state.time &&
       convertTimeToMinutes(trip.trip.stoptime) >= this.state.time
     ));
@@ -184,6 +199,12 @@ class TripMap extends Component {
           }
         </Map>
         <TimeSlider value={this.state.time} onChange={this.handleChange} />
+        <Calendar
+          selected={this.state.date}
+          onChange={this.changeDate}
+          minDate={moment('07/01/17')}
+          maxDate={moment('07/31/17')}
+        />
       </div>
     );
   }
