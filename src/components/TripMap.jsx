@@ -48,15 +48,11 @@ class TripMap extends Component {
       },
     );
 
-    this.onMouseLeave = this.onMouseLeave.bind(this);
+    this.hidePopup = this.hidePopup.bind(this);
   }
 
-  onMouseEnter = (trip) => {
+  handleClick = (trip) => {
     this.setState({ trip });
-  }
-
-  onMouseLeave() {
-    this.setState({ trip: null });
   }
 
   fetchRoutes() {
@@ -75,7 +71,12 @@ class TripMap extends Component {
     this.fetchRoutes();
     this.setState({
       time: value,
+      trip: null,
     });
+  }
+
+  hidePopup() {
+    this.setState({ trip: null });
   }
 
   renderPaths() {
@@ -88,8 +89,7 @@ class TripMap extends Component {
       <Feature
         key={trip.trip.bikeid}
         coordinates={trip.coords}
-        onMouseEnter={this.onMouseEnter.bind(this, trip)}
-        onMouseLeave={this.onMouseLeave}
+        onClick={this.handleClick.bind(this, trip)}
       />
     ));
 
@@ -138,6 +138,7 @@ class TripMap extends Component {
             height: '100vh',
             width: '100vw',
           }}
+          onClick={this.hidePopup}
         >
           {
             !_.isEmpty(this.props.routes) && (
