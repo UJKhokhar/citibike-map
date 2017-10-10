@@ -1,19 +1,20 @@
 const csv = require('csvtojson');
 const fs = require('fs');
+const path = require('path');
 
-tripData = [];
+const tripData = [];
 
 csv()
-  .fromFile(__dirname + "/trips.csv")
-  .on('json', (json) => { // this func will be called 3 times
-  	tripData.push(json);
+  .fromFile(path.join(__dirname, 'trips.csv'))
+  .on('json', (json) => {
+    tripData.push(json);
   })
   .on('done', () => {
-    fs.writeFile("tripdata.json", JSON.stringify(tripData), function(err) {
-        if (err) {
-            return console.log(err);
-        }
+    fs.writeFile('tripdata.json', JSON.stringify(tripData), (err) => {
+      if (err) {
+        return console.log(err);
+      }
 
-        console.log("The file was saved!");
+      return console.log('The file was saved!');
     });
   });
