@@ -7,10 +7,10 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 
 import { fetchTripRoute } from '../actions';
-import convertTimeToMinutes from '../utilities/convert_time';
 import json from '../../tripdata.json';
 import TimeSlider from './TimeSlider';
 import Calendar from './Calendar';
+import convertMinutesToTime from '../utilities/convertMinutesToTime';
 
 const memoize = require('memoizee');
 
@@ -63,8 +63,8 @@ class TripMap extends Component {
   fetchRoutes() {
     const trips = _.filter(json, o => (
       moment(o.starttime).isSame(this.state.date, 'day') &&
-      convertTimeToMinutes(o.starttime) <= this.state.time &&
-      convertTimeToMinutes(o.stoptime) >= this.state.time
+      moment(o.starttime).isSameOrBefore(`${this.state.date.format('YYYY-MM-DD')} ${convertMinutesToTime(this.state.time)}:00`) &&
+      moment(o.stoptime).isSameOrAfter(`${this.state.date.format('YYYY-MM-DD')} ${convertMinutesToTime(this.state.time)}:00`)
     ));
 
     let i;
@@ -93,10 +93,12 @@ class TripMap extends Component {
 
   renderPaths() {
     const activeTrips = _.filter(this.props.routes, trip => (
-      moment(trip.trip.starttime).isSame(this.state.date, 'day') &&
-      convertTimeToMinutes(trip.trip.starttime) <= this.state.time &&
-      convertTimeToMinutes(trip.trip.stoptime) >= this.state.time
+      moment(trip.starttime).isSame(this.state.date, 'day') &&
+      moment(trip.starttime).isSameOrBefore(`${this.state.date.format('YYYY-MM-DD')} ${convertMinutesToTime(this.state.time)}:00`) &&
+      moment(trip.stoptime).isSameOrAfter(`${this.state.date.format('YYYY-MM-DD')} ${convertMinutesToTime(this.state.time)}:00`)
     ));
+
+    // fulldate = `${this.state.date} ${convertMinutesToTime(this.state.time)}:00`
 
     const paths = _.map(activeTrips, trip => (
       <Feature
@@ -112,8 +114,8 @@ class TripMap extends Component {
   renderStartStations() {
     const activeTrips = _.filter(this.props.routes, trip => (
       moment(trip.trip.starttime).isSame(this.state.date, 'day') &&
-      convertTimeToMinutes(trip.trip.starttime) <= this.state.time &&
-      convertTimeToMinutes(trip.trip.stoptime) >= this.state.time
+      moment(trip.trip.starttime).isSameOrBefore(`${this.state.date.format('YYYY-MM-DD')} ${convertMinutesToTime(this.state.time)}:00`) &&
+      moment(trip.trip.stoptime).isSameOrAfter(`${this.state.date.format('YYYY-MM-DD')} ${convertMinutesToTime(this.state.time)}:00`)
     ));
 
     return _.map(activeTrips, trip => (
@@ -130,8 +132,8 @@ class TripMap extends Component {
   renderEndStations() {
     const activeTrips = _.filter(this.props.routes, trip => (
       moment(trip.trip.starttime).isSame(this.state.date, 'day') &&
-      convertTimeToMinutes(trip.trip.starttime) <= this.state.time &&
-      convertTimeToMinutes(trip.trip.stoptime) >= this.state.time
+      moment(trip.trip.starttime).isSameOrBefore(`${this.state.date.format('YYYY-MM-DD')} ${convertMinutesToTime(this.state.time)}:00`) &&
+      moment(trip.trip.stoptime).isSameOrAfter(`${this.state.date.format('YYYY-MM-DD')} ${convertMinutesToTime(this.state.time)}:00`)
     ));
 
     return _.map(activeTrips, trip => (
