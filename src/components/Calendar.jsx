@@ -18,8 +18,8 @@ export default class Calendar extends PureComponent {
         inline
         selected={this.props.selected}
         onChange={this.props.onChange}
-        minDate={moment('07/01/17')}
-        maxDate={moment('07/31/17')}
+        minDate={moment('2017-07-01')}
+        maxDate={moment('2017-07-31')}
       />
     );
   }

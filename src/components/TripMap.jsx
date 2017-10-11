@@ -40,7 +40,7 @@ class TripMap extends Component {
       zoom: [11],
       style: 'mapbox://styles/mapbox/streets-v9',
       trip: null,
-      date: moment('07/01/17'),
+      date: moment('2017-07-01'),
     };
 
     // Memoize so that we don't make the same request twice
@@ -62,7 +62,7 @@ class TripMap extends Component {
 
   fetchRoutes() {
     const trips = _.filter(json, o => (
-      moment(o.starttime).isSame(this.state.date, 'day') &&
+      moment(o.starttime).isSame(this.state.date.format('YYYY-MM-DD'), 'day') &&
       moment(o.starttime).isSameOrBefore(`${this.state.date.format('YYYY-MM-DD')} ${convertMinutesToTime(this.state.time)}:00`) &&
       moment(o.stoptime).isSameOrAfter(`${this.state.date.format('YYYY-MM-DD')} ${convertMinutesToTime(this.state.time)}:00`)
     ));
@@ -93,9 +93,9 @@ class TripMap extends Component {
 
   renderPaths() {
     const activeTrips = _.filter(this.props.routes, trip => (
-      moment(trip.starttime).isSame(this.state.date, 'day') &&
-      moment(trip.starttime).isSameOrBefore(`${this.state.date.format('YYYY-MM-DD')} ${convertMinutesToTime(this.state.time)}:00`) &&
-      moment(trip.stoptime).isSameOrAfter(`${this.state.date.format('YYYY-MM-DD')} ${convertMinutesToTime(this.state.time)}:00`)
+      moment(trip.trip.starttime).isSame(this.state.date.format('YYYY-MM-DD'), 'day') &&
+      moment(trip.trip.starttime).isSameOrBefore(`${this.state.date.format('YYYY-MM-DD')} ${convertMinutesToTime(this.state.time)}:00`) &&
+      moment(trip.trip.stoptime).isSameOrAfter(`${this.state.date.format('YYYY-MM-DD')} ${convertMinutesToTime(this.state.time)}:00`)
     ));
 
     // fulldate = `${this.state.date} ${convertMinutesToTime(this.state.time)}:00`
@@ -113,7 +113,7 @@ class TripMap extends Component {
 
   renderStartStations() {
     const activeTrips = _.filter(this.props.routes, trip => (
-      moment(trip.trip.starttime).isSame(this.state.date, 'day') &&
+      moment(trip.trip.starttime).isSame(this.state.date.format('YYYY-MM-DD'), 'day') &&
       moment(trip.trip.starttime).isSameOrBefore(`${this.state.date.format('YYYY-MM-DD')} ${convertMinutesToTime(this.state.time)}:00`) &&
       moment(trip.trip.stoptime).isSameOrAfter(`${this.state.date.format('YYYY-MM-DD')} ${convertMinutesToTime(this.state.time)}:00`)
     ));
@@ -204,8 +204,6 @@ class TripMap extends Component {
         <Calendar
           selected={this.state.date}
           onChange={this.changeDate}
-          minDate={moment('07/01/17')}
-          maxDate={moment('07/31/17')}
         />
       </div>
     );
