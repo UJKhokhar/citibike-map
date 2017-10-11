@@ -6,11 +6,16 @@ const Dotenv = require('dotenv-webpack');
 
 const VENDOR_LIBS = [
   'axios',
-  // Want to add this but unresolved errors 'csvtojson',
+  // module not found errors
+  // 'dotenv-webpack',
+  // 'csvtojson',
   'lodash',
   'mapbox-gl',
   'memoizee',
+  'moment',
+  'prop-types',
   'react',
+  'react-datepicker',
   'react-dom',
   'react-mapbox-gl',
   'react-rangeslider',
@@ -61,8 +66,15 @@ const config = {
     alias: {
       // From mapbox-gl-js README. Required for non-browserify bundlers (e.g. webpack):
       'mapbox-gl$': path.resolve('./node_modules/mapbox-gl/dist/mapbox-gl.js'),
+      // https://github.com/moment/moment/issues/2979
+      moment$: 'moment/moment.js',
     },
     extensions: ['.js', '.jsx'],
+  },
+
+  node: {
+    // https://github.com/webpack-contrib/css-loader/issues/447
+    fs: 'empty',
   },
 
   plugins: [
