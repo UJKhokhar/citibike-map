@@ -25,8 +25,6 @@ export default class TestMap extends Component {
     this.setState({
       date,
     });
-
-    
   }
 
   render() {

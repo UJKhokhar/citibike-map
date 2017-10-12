@@ -11,6 +11,7 @@ import json from '../../tripdata.json';
 import TimeSlider from './TimeSlider';
 import Calendar from './Calendar';
 import convertMinutesToTime from '../utilities/convertMinutesToTime';
+import '../../styles/errors.scss';
 
 const memoize = require('memoizee');
 
@@ -24,10 +25,14 @@ const propTypes = {
     coords: PropTypes.object,
     trip: PropTypes.object,
   }),
+  errors: PropTypes.shape({
+    error: PropTypes.string,
+  }),
 };
 
 const defaultProps = {
   routes: {},
+  errors: {},
 };
 
 class TripMap extends Component {
@@ -147,6 +152,9 @@ class TripMap extends Component {
   render() {
     return (
       <div>
+        { !_.isEmpty(this.props.errors) && (
+          <div className="error">{this.props.errors.error}</div>
+        )}
         <Map
           style={this.state.style}
           center={this.state.center}
@@ -213,8 +221,8 @@ class TripMap extends Component {
 TripMap.propTypes = propTypes;
 TripMap.defaultProps = defaultProps;
 
-function mapStateToProps({ routes }) {
-  return { routes };
+function mapStateToProps({ routes, errors }) {
+  return { routes, errors };
 }
 
 function mapDispatchToProps(dispatch) {
