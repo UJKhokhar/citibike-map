@@ -25,6 +25,21 @@ export function fetchStationStatus() {
   };
 }
 
+export const FETCH_TRIPS = 'FETCH_TRIPS';
+
+export function fetchTrips(date, time) {
+  console.log('sup');
+  const request = axios.post(
+    'http://localhost:3030/trips',
+    { date, time },
+  );
+
+  return {
+    type: FETCH_TRIPS,
+    payload: request,
+  };
+}
+
 export const FETCH_ROUTE = 'FETCH_ROUTE';
 
 const baseURL = 'https://api.mapbox.com/directions/v5/mapbox/cycling';

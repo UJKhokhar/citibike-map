@@ -6,7 +6,7 @@ import ReactMapboxGl, { Layer, Feature, Popup } from 'react-mapbox-gl';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 
-import { fetchTripRoute } from '../actions';
+import { fetchTripRoute, fetchTrips } from '../actions';
 import json from '../../tripdata.json';
 import TimeSlider from './TimeSlider';
 import Calendar from './Calendar';
@@ -152,6 +152,7 @@ class TripMap extends Component {
   render() {
     return (
       <div>
+        { console.log(this.props.fetchTrips('2017-07-01', '00:10:00')) }
         { !_.isEmpty(this.props.errors) && (
           <div className="error">{this.props.errors.error}</div>
         )}
@@ -226,7 +227,7 @@ function mapStateToProps({ routes, errors }) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ fetchTripRoute }, dispatch);
+  return bindActionCreators({ fetchTripRoute, fetchTrips }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TripMap);
