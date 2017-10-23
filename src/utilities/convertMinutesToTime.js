@@ -5,5 +5,5 @@ export default function convertMinutesToTime(minutes) {
   hour = hour < 10 ? `0${hour}` : hour;
   min = min < 10 ? `0${min}` : min;
 
-  return `${hour}:${min}`;
+  return `${hour}:${min}:00`;
 }

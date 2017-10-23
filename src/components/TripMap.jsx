@@ -8,15 +8,15 @@ import memoize from 'memoizee';
 import _ from 'lodash';
 import Calendar from './Calendar';
 import TimeSlider from './TimeSlider';
-import { fetchTrips, fetchTripRoute } from '../actions';
+import { fetchTrips } from '../actions';
 import convertMinutesToTime from '../utilities/convertMinutesToTime';
+import '../../styles/test.scss';
 
 const Map = ReactMapboxGl({
   accessToken: process.env.MAPBOX_API_KEY,
 });
 
 const propTypes = {
-  fetchTripRoute: PropTypes.func.isRequired,
   fetchTrips: PropTypes.func.isRequired,
   routes: PropTypes.shape({
     coords: PropTypes.object,
@@ -41,25 +41,16 @@ class TripMap extends Component {
       center: [-74.0059, 40.7128],
       zoom: [11],
       style: 'mapbox://styles/mapbox/streets-v9',
-      date: moment('2017-07-01'),
+      date: moment('2017-09-01'),
       time: 0,
       trip: null,
     };
 
-    this.filterActiveTrips = this.filterActiveTrips.bind(this);
     this.handleDateChange = this.handleDateChange.bind(this);
     this.handleTimeChange = this.handleTimeChange.bind(this);
     this.hidePopup = this.hidePopup.bind(this);
 
     this.memoizedTrips = memoize(this.props.fetchTrips, { length: 2 });
-
-    this.memoizedRoutes = memoize(
-      this.props.fetchTripRoute,
-      {
-        primitive: true,
-        normalizer: args => JSON.stringify(args[0]),
-      },
-    );
   }
 
   componentDidMount() {
@@ -67,10 +58,6 @@ class TripMap extends Component {
       this.state.date.format('YYYY-MM-DD'),
       convertMinutesToTime(this.state.time),
     );
-
-    _.forEach(this.filterActiveTrips(this.props.trips), (trip) => {
-      this.memoizedRoutes(trip);
-    });
   }
 
   componentDidUpdate() {
@@ -78,10 +65,6 @@ class TripMap extends Component {
       this.state.date.format('YYYY-MM-DD'),
       convertMinutesToTime(this.state.time),
     );
-
-    _.forEach(this.filterActiveTrips(this.props.trips), (trip) => {
-      this.memoizedRoutes(trip);
-    });
   }
 
   handlePathClick = (trip) => {
@@ -104,19 +87,12 @@ class TripMap extends Component {
     this.setState({ trip: null });
   }
 
-  filterActiveTrips(trips) {
-    return _.filter(trips, trip => (
-      moment(trip.starttime).isSameOrBefore(`${this.state.date.format('YYYY-MM-DD')}T${convertMinutesToTime(this.state.time)}Z`, 'minute') &&
-      moment(trip.stoptime).isSameOrAfter(`${this.state.date.format('YYYY-MM-DD')}T${convertMinutesToTime(this.state.time)}Z`, 'minute')
-    ));
-  }
-
   renderPaths() {
     // Find a better way to only render paths for activeTrips
-    const activeTrips = _.filter(this.props.routes, trip => (
-      moment(trip.trip.starttime).isSameOrBefore(`${this.state.date.format('YYYY-MM-DD')}T${convertMinutesToTime(this.state.time)}Z`, 'minute') &&
+    const activeTrips = _.filter(this.props.trips, (trip) => {
+      return moment(trip.trip.starttime).isSameOrBefore(`${this.state.date.format('YYYY-MM-DD')}T${convertMinutesToTime(this.state.time)}Z`, 'minute') &&
       moment(trip.trip.stoptime).isSameOrAfter(`${this.state.date.format('YYYY-MM-DD')}T${convertMinutesToTime(this.state.time)}Z`, 'minute')
-    ));
+    });
 
     const paths = _.map(activeTrips, trip => (
       <Feature
@@ -148,7 +124,7 @@ class TripMap extends Component {
         <Layer
           type="line"
           paint={{
-            'line-width': 6,
+            'line-width': 3,
           }}
         >
           {paths}
@@ -187,24 +163,20 @@ class TripMap extends Component {
             width: '100vw',
           }}
         >
-          {this.renderPaths()}
-          {!_.isEmpty(this.props.routes) && (
-            <div>
-              {
-                this.state.trip != null && (
-                  <Popup
-                    key={this.state.trip.starttime}
-                    offset={[0, -50]}
-                    coordinates={this.state.trip.coords[0]}
-                  >
-                    <div>Bike ID: {this.state.trip.trip.bikeid}</div>
-                    <div>Start Station: {this.state.trip.trip['start station name']}</div>
-                    <div>End Station: {this.state.trip.trip['end station name']}</div>
-                    <div>Trip Duration: {this.state.trip.trip.tripduration}</div>
-                  </Popup>
-                )
-              }
-            </div>
+          {!_.isEmpty(this.props.trips) && (
+            <div>{this.renderPaths()}</div>
+          )}
+          {this.state.trip != null && (
+            <Popup
+              key={this.state.trip.starttime}
+              offset={[0, -50]}
+              coordinates={this.state.trip.coords[0]}
+            >
+              <div>Bike ID: {this.state.trip.trip.bikeid}</div>
+              <div>Start Station: {this.state.trip.trip['start station name']}</div>
+              <div>End Station: {this.state.trip.trip['end station name']}</div>
+              <div>Trip Duration: {this.state.trip.trip.tripduration}</div>
+            </Popup>
           )}
         </Map>
         <TimeSlider value={this.state.time} onChange={this.handleTimeChange} />
@@ -222,7 +194,7 @@ function mapStateToProps({ trips, routes, errors }) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ fetchTrips, fetchTripRoute }, dispatch);
+  return bindActionCreators({ fetchTrips }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TripMap);

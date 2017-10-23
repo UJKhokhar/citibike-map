@@ -19,8 +19,9 @@ export default class TimeSlider extends PureComponent {
     return (
       <Slider
         value={this.props.value}
-        min={0}
-        max={11}
+        min={420}
+        max={480}
+        step={1}
         format={convertMinutesToTime}
         onChange={this.props.onChange}
       />
