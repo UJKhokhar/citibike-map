@@ -5,8 +5,8 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
-import StationMap from './components/StationMap';
-import TripMap from './components/TripMap';
+import LoadableStationMap from './loadables/LoadableStationMap';
+import LoadableTripMap from './loadables/LoadableTripMap';
 import Nav from './components/Nav';
 import reducers from './reducers';
 
@@ -24,8 +24,8 @@ ReactDOM.render(
         <div>
           <Nav />
           <Switch>
-            <Route path="/" exact component={StationMap} />
-            <Route path="/trips" exact component={TripMap} />
+            <Route path="/" exact component={LoadableStationMap} />
+            <Route path="/trips" exact component={LoadableTripMap} />
           </Switch>
         </div>
       </Router>
