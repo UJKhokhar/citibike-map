@@ -8,9 +8,10 @@ export function fetchStations() {
     'https://gbfs.citibikenyc.com/gbfs/en/station_information.json',
   );
 
-  return {
-    type: FETCH_STATIONS,
-    payload: request,
+  return (dispatch) => {
+    request.then(({ data }) => {
+      dispatch({ type: FETCH_STATIONS, payload: data });
+    });
   };
 }
 
@@ -19,9 +20,10 @@ export function fetchStationStatus() {
     'https://gbfs.citibikenyc.com/gbfs/en/station_status.json',
   );
 
-  return {
-    type: FETCH_STATION_STATUS,
-    payload: request,
+  return (dispatch) => {
+    request.then(({ data }) => {
+      dispatch({ type: FETCH_STATION_STATUS, payload: data });
+    });
   };
 }
 
