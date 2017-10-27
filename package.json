@@ -1,13 +1,13 @@
 {
-  "name": "react_webpack_boilerplate",
+  "name": "citibike_react_app",
   "version": "1.0.0",
-  "description": "",
+  "description": "Citibike map that displays stations and trip data. Built with React",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rimraf build",
-    "build": "NODE_ENV=production npm run clean && webpack -p --config webpack.prod.js",
-    "start": "NODE_ENV=development webpack-dev-server --config webpack.dev.js"
+    "build": "npm run clean && NODE_ENV=production webpack -p --config ./webpack.prod.js",
+    "start": "NODE_ENV=development webpack-dev-server --config ./webpack.dev.js"
   },
   "author": "",
   "license": "ISC",
