@@ -11,7 +11,7 @@ const propTypes = {
 };
 
 const defaultProps = {
-  value: 0,
+  value: 420,
 };
 
 export default class TimeSlider extends PureComponent {

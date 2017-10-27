@@ -5,8 +5,7 @@ export default function (state = {}, action) {
   switch (action.type) {
     case FETCH_TRIPS: {
       if (!_.isEmpty(action.payload)) {
-        let newState = {};
-        console.log('payload', action.payload);
+        const newState = {};
 
         _.forEach(action.payload, function(data) {
           Object.assign(newState, state, {
@@ -15,14 +14,9 @@ export default function (state = {}, action) {
         });
 
         return newState;
-      } else {
-        return state;
       }
-      console.log(action.payload);
 
-
-
-      return newState;
+      return state;
     }
     default: {
       return state;

@@ -1,11 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import '../../styles/nav.scss';
 
 const Nav = () => (
-  <div>
+  <div className="nav">
     <ul>
-      <Link to={'/'}>Station Map</Link>
-      <Link to={'/trips'}>Trip Map</Link>
+      <li><Link to={'/'}>Station Map</Link></li>
+      <li><Link to={'/trips'}>Trip Map</Link></li>
     </ul>
   </div>
 );

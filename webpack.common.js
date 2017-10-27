@@ -8,7 +8,6 @@ const VENDOR_LIBS = [
   'axios',
   // module not found errors
   // 'dotenv-webpack',
-  // 'csvtojson',
   'lodash',
   'mapbox-gl',
   'memoizee',

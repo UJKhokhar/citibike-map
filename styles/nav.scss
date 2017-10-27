@@ -1,0 +1,46 @@
+.nav {
+    border-radius: 4px;
+    position: absolute;
+    left: 30px;
+    top: 30px;
+    text-align: center;
+    z-index: 1;
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+  }
+
+  li {
+    display: inline-block;
+
+    a {
+      padding: 15px;
+      font-family: helvetica, sans-serif;
+      color: #ffffff;
+      text-decoration: none;
+      display: block;
+      background-color: #1f6da0;
+
+      &:hover {
+        background-color: #154c70;
+      }
+    }
+
+    &:first-of-type {
+      a {
+        border-right: 1px solid white;
+        border-top-left-radius: 6px;
+        border-bottom-left-radius: 6px;
+      }
+    }
+
+    &:last-of-type {
+      a {
+        border-top-right-radius: 6px;
+        border-bottom-right-radius: 6px;
+      }
+    }
+  }
+}

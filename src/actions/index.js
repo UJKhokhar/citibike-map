@@ -30,8 +30,10 @@ export function fetchStationStatus() {
 export const FETCH_TRIPS = 'FETCH_TRIPS';
 
 export function fetchTrips(date, time) {
+  const tripsURL = process.env.NODE_ENV === 'development' ? 'http://localhost:3030/trips' : 'https://boiling-everglades-19027.herokuapp.com/trips';
+
   const request = axios.post(
-    'http://localhost:3030/trips',
+    tripsURL,
     { date, time },
   );
 
@@ -41,23 +43,3 @@ export function fetchTrips(date, time) {
     });
   };
 }
-
-// export const FETCH_ROUTE = 'FETCH_ROUTE';
-//
-// const baseURL = 'https://api.mapbox.com/directions/v5/mapbox/cycling';
-// const accessToken = process.env.MAPBOX_API_KEY;
-//
-// export function fetchTripRoute(trip) {
-//   const request = axios.get(
-//     `${baseURL}/${trip['start station longitude']},${trip['start station latitude']};${trip['end station longitude']},${trip['end station latitude']}?access_token=${accessToken}&geometries=geojson`,
-//   );
-//
-//   return (dispatch) => {
-//     request.then(({ data }) => {
-//       dispatch({ type: FETCH_ROUTE, payload: data, meta: { trip } });
-//     }).catch((error) => {
-//       console.log(error.response);
-//       dispatch({ type: error.response.status.toString(), payload: error.response });
-//     });
-//   };
-// }

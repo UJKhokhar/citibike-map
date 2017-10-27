@@ -18,10 +18,6 @@ const Map = ReactMapboxGl({
 
 const propTypes = {
   fetchTrips: PropTypes.func.isRequired,
-  routes: PropTypes.shape({
-    coords: PropTypes.object,
-    trip: PropTypes.object,
-  }),
   errors: PropTypes.shape({
     error: PropTypes.string,
   }),
@@ -42,7 +38,7 @@ class TripMap extends Component {
       zoom: [11],
       style: 'mapbox://styles/mapbox/streets-v9',
       date: moment('2017-09-01'),
-      time: 0,
+      time: 420,
       trip: null,
     };
 
@@ -89,10 +85,10 @@ class TripMap extends Component {
 
   renderPaths() {
     // Find a better way to only render paths for activeTrips
-    const activeTrips = _.filter(this.props.trips, (trip) => {
-      return moment(trip.trip.starttime).isSameOrBefore(`${this.state.date.format('YYYY-MM-DD')}T${convertMinutesToTime(this.state.time)}Z`, 'minute') &&
+    const activeTrips = _.filter(this.props.trips, trip => (
+      moment(trip.trip.starttime).isSameOrBefore(`${this.state.date.format('YYYY-MM-DD')}T${convertMinutesToTime(this.state.time)}Z`, 'minute') &&
       moment(trip.trip.stoptime).isSameOrAfter(`${this.state.date.format('YYYY-MM-DD')}T${convertMinutesToTime(this.state.time)}Z`, 'minute')
-    });
+    ));
 
     const paths = _.map(activeTrips, trip => (
       <Feature
