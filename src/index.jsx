@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { HashRouter, Switch, Route } from 'react-router-dom';
 
 import LoadableStationMap from './loadables/LoadableStationMap';
 import LoadableTripMap from './loadables/LoadableTripMap';
@@ -18,7 +18,7 @@ const store = createStore(
 ReactDOM.render(
   <Provider store={store}>
     <div>
-      <Router>
+      <HashRouter>
         <div>
           <Nav />
           <Switch>
@@ -26,7 +26,7 @@ ReactDOM.render(
             <Route path="/trips" exact component={LoadableTripMap} />
           </Switch>
         </div>
-      </Router>
+      </HashRouter>
     </div>
   </Provider>,
   document.querySelector('.container'),
