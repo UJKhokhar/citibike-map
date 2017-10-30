@@ -7,9 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rimraf build",
     "build": "npm run clean && NODE_ENV=production webpack -p --config ./webpack.prod.js",
-    "start": "NODE_ENV=development webpack-dev-server --config ./webpack.dev.js"
+    "start": "NODE_ENV=development webpack-dashboard -p 8080 -- webpack-dev-server --config ./webpack.dev.js"
   },
-  "author": "",
+  "author": "Umar Khokhar",
   "license": "ISC",
   "devDependencies": {
     "babel-core": "^6.25.0",
@@ -30,6 +30,7 @@
     "rimraf": "^2.6.1",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.18.2",
+    "webpack-dashboard": "^1.0.0",
     "webpack-dev-server": "^2.6.1"
   },
   "dependencies": {
