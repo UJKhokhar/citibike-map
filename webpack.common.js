@@ -21,7 +21,6 @@ const VENDOR_LIBS = [
   'react-redux',
   'react-router',
   'redux',
-  'redux-promise',
 ];
 
 const extractSass = new ExtractTextPlugin({
