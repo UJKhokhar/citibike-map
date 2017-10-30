@@ -25,7 +25,7 @@ const VENDOR_LIBS = [
 
 const extractSass = new ExtractTextPlugin({
   filename: '[name].[contenthash].css',
-  disable: process.env.NODE_END === 'development',
+  disable: process.env.NODE_ENV === 'development',
 });
 
 const config = {
