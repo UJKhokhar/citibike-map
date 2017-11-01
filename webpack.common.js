@@ -17,7 +17,6 @@ const VENDOR_LIBS = [
   'react-datepicker',
   'react-dom',
   'react-mapbox-gl',
-  'react-rangeslider',
   'react-redux',
   'react-router',
   'redux',

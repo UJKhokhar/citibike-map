@@ -7,10 +7,8 @@ import PropTypes from 'prop-types';
 import memoize from 'memoizee';
 import _ from 'lodash';
 import Calendar from './Calendar';
-import TimeSlider from './TimeSlider';
 import { fetchTrips } from '../actions';
-import convertMinutesToTime from '../utilities/convertMinutesToTime';
-import '../../styles/test.scss';
+import '../../styles/calendar.scss';
 
 const Map = ReactMapboxGl({
   accessToken: process.env.MAPBOX_API_KEY,
@@ -37,29 +35,25 @@ class TripMap extends Component {
       center: [-74.0059, 40.7128],
       zoom: [11],
       style: 'mapbox://styles/mapbox/streets-v9',
-      date: moment('2017-09-01'),
-      time: 420,
+      dateAndTime: moment('2017-09-01T07:00:00'),
       trip: null,
     };
 
     this.handleDateChange = this.handleDateChange.bind(this);
-    this.handleTimeChange = this.handleTimeChange.bind(this);
     this.hidePopup = this.hidePopup.bind(this);
 
-    this.memoizedTrips = memoize(this.props.fetchTrips, { length: 2 });
+    this.memoizedTrips = memoize(this.props.fetchTrips, { length: 1 });
   }
 
   componentDidMount() {
     this.memoizedTrips(
-      this.state.date.format('YYYY-MM-DD'),
-      convertMinutesToTime(this.state.time),
+      this.state.dateAndTime.format('YYYY-MM-DDTHH:mm:ssZ'),
     );
   }
 
   componentDidUpdate() {
     this.memoizedTrips(
-      this.state.date.format('YYYY-MM-DD'),
-      convertMinutesToTime(this.state.time),
+      this.state.dateAndTime.format('YYYY-MM-DDTHH:mm:ssZ'),
     );
   }
 
@@ -67,15 +61,9 @@ class TripMap extends Component {
     this.setState({ trip });
   }
 
-  handleDateChange(date) {
+  handleDateChange(dateAndTime) {
     this.setState({
-      date,
-    });
-  }
-
-  handleTimeChange = (newTime) => {
-    this.setState({
-      time: newTime,
+      dateAndTime,
     });
   }
 
@@ -86,8 +74,8 @@ class TripMap extends Component {
   renderPaths() {
     // Find a better way to only render paths for activeTrips
     const activeTrips = _.filter(this.props.trips, trip => (
-      moment(trip.trip.starttime).isSameOrBefore(`${this.state.date.format('YYYY-MM-DD')}T${convertMinutesToTime(this.state.time)}Z`, 'minute') &&
-      moment(trip.trip.stoptime).isSameOrAfter(`${this.state.date.format('YYYY-MM-DD')}T${convertMinutesToTime(this.state.time)}Z`, 'minute')
+      moment(trip.trip.starttime).isSameOrBefore(this.state.dateAndTime) &&
+      moment(trip.trip.stoptime).isSameOrAfter(this.state.dateAndTime)
     ));
 
     const paths = _.map(activeTrips, trip => (
@@ -175,8 +163,7 @@ class TripMap extends Component {
             </Popup>
           )}
         </Map>
-        <TimeSlider value={this.state.time} onChange={this.handleTimeChange} />
-        <Calendar selected={this.state.date} onChange={this.handleDateChange} />
+        <Calendar selected={this.state.dateAndTime} onChange={this.handleDateChange} />
       </div>
     );
   }

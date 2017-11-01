@@ -29,12 +29,12 @@ export function fetchStationStatus() {
 
 export const FETCH_TRIPS = 'FETCH_TRIPS';
 
-export function fetchTrips(date, time) {
+export function fetchTrips(dateAndTime) {
   const tripsURL = process.env.NODE_ENV === 'development' ? 'http://localhost:3030/trips' : 'https://boiling-everglades-19027.herokuapp.com/trips';
 
   const request = axios.post(
     tripsURL,
-    { date, time },
+    { dateAndTime },
   );
 
   return (dispatch) => {
