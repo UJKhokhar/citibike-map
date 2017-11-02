@@ -107,6 +107,7 @@ class TripMap extends Component {
 
     return (
       <div>
+        <div className="numactive"><b>{activeTrips.length}</b> active trips on {this.state.dateAndTime.format('dddd, MMMM Do YYYY [at] h:mm:ssa')}</div>
         <Layer
           type="line"
           paint={{
@@ -157,14 +158,14 @@ class TripMap extends Component {
         {this.state.trip != null && (
           <div className="popup">
             <ul>
-              <li><span>Start Station: </span>{this.state.trip.trip['start station name']}</li>
-              <li><span>End Station: </span>{this.state.trip.trip['end station name']}</li>
+              <li><b>Start Station: </b>{this.state.trip.trip['start station name']}</li>
+              <li><b>End Station: </b>{this.state.trip.trip['end station name']}</li>
               <li>
-                <span>Trip Duration: </span>
+                <b>Trip Duration: </b>
                 {convertSecondsToMinutes(this.state.trip.trip.tripduration)}
               </li>
-              <li><span>Start Time: </span>{moment(this.state.trip.trip.starttime).format('HH:mm:ss')}</li>
-              <li><span>End Time: </span>{moment(this.state.trip.trip.stoptime).format('HH:mm:ss')}</li>
+              <li><b>Start Time: </b>{moment(this.state.trip.trip.starttime).format('HH:mm:ss')}</li>
+              <li><b>End Time: </b>{moment(this.state.trip.trip.stoptime).format('HH:mm:ss')}</li>
             </ul>
           </div>
         )}

@@ -1,14 +1,15 @@
 .popup {
   background-color: #ffffff;
   position: absolute;
-  top: 320px;
-  right: 10px;
+  top: 310px;
+  right: 30px;
   border-radius: 4px;
   border: 2px solid #1f6da0;
   padding: 15px;
   width: 290px;
   font-family: 'Helvetica', san-serif;
   font-size: 14px;
+  opacity: .9;
 
   ul {
     list-style-type: none;
@@ -23,4 +24,18 @@
       margin-bottom: 0;
     }
   }
+}
+
+.numactive {
+  position: absolute;
+  top: 35px;
+  right: 36%;
+  border: 2px solid #1f6da0;
+  z-index: 1;
+  background-color: #ffffff;
+  font-family: 'Helvetica', san-serif;
+  font-size: 14px;
+  border-radius: 4px;
+  padding: 10px;
+  opacity: .9;
 }
