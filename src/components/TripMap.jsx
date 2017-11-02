@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import ReactMapboxGl, { Layer, Feature, Popup } from 'react-mapbox-gl';
+import ReactMapboxGl, { Layer, Feature } from 'react-mapbox-gl';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import memoize from 'memoizee';
@@ -9,6 +9,8 @@ import _ from 'lodash';
 import Calendar from './Calendar';
 import { fetchTrips } from '../actions';
 import '../../styles/calendar.scss';
+import '../../styles/popup.scss';
+import convertSecondsToMinutes from '../utilities/convertSecondsToMinutes';
 
 const Map = ReactMapboxGl({
   accessToken: process.env.MAPBOX_API_KEY,
@@ -150,20 +152,22 @@ class TripMap extends Component {
           {!_.isEmpty(this.props.trips) && (
             <div>{this.renderPaths()}</div>
           )}
-          {this.state.trip != null && (
-            <Popup
-              key={this.state.trip.starttime}
-              offset={[0, -50]}
-              coordinates={this.state.trip.coords[0]}
-            >
-              <div>Bike ID: {this.state.trip.trip.bikeid}</div>
-              <div>Start Station: {this.state.trip.trip['start station name']}</div>
-              <div>End Station: {this.state.trip.trip['end station name']}</div>
-              <div>Trip Duration: {this.state.trip.trip.tripduration}</div>
-            </Popup>
-          )}
         </Map>
         <Calendar selected={this.state.dateAndTime} onChange={this.handleDateChange} />
+        {this.state.trip != null && (
+          <div className="popup">
+            <ul>
+              <li><span>Start Station: </span>{this.state.trip.trip['start station name']}</li>
+              <li><span>End Station: </span>{this.state.trip.trip['end station name']}</li>
+              <li>
+                <span>Trip Duration: </span>
+                {convertSecondsToMinutes(this.state.trip.trip.tripduration)}
+              </li>
+              <li><span>Start Time: </span>{moment(this.state.trip.trip.starttime).format('HH:mm:ss')}</li>
+              <li><span>End Time: </span>{moment(this.state.trip.trip.stoptime).format('HH:mm:ss')}</li>
+            </ul>
+          </div>
+        )}
       </div>
     );
   }
