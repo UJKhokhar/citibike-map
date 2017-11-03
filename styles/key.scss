@@ -1,0 +1,31 @@
+.key {
+  background-color: #fff;
+  position: absolute;
+  top: 304px;
+  right: 30px;
+  opacity: .9;
+  border-radius: 4px;
+  border: 2px solid #1f6da0;
+  font-family: 'Helvetica', san-serif;
+  font-size: 13px;
+  padding: 0px 12px;
+
+  span {
+    width: 50px;
+    height: 3px;
+    display: inline-block;
+    margin: 0 6px 3px 0;
+
+    &.short {
+      background-color: #f39057;
+    }
+
+    &.medium {
+      background-color: #73d0ec;
+    }
+
+    &.long {
+      background-color: #aee59f;
+    }
+  }
+}

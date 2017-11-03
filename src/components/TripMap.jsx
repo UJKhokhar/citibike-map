@@ -10,6 +10,7 @@ import Calendar from './Calendar';
 import { fetchTrips } from '../actions';
 import '../../styles/calendar.scss';
 import '../../styles/popup.scss';
+import '../../styles/key.scss';
 import convertSecondsToMinutes from '../utilities/convertSecondsToMinutes';
 
 const Map = ReactMapboxGl({
@@ -82,22 +83,22 @@ class TripMap extends Component {
       moment(trip.trip.stoptime).isSameOrAfter(this.state.dateAndTime)
     ));
 
-    const longestTrips = _.filter(activeTrips, trip => {
+    const longestTrips = _.filter(activeTrips, trip => (
       // Greater than or equal to 30 minutes and 1 second
-      return trip.trip.tripduration >= 1801;
-    });
+      trip.trip.tripduration >= 1801
+    ));
 
-    const shortestTrips = _.filter(activeTrips, trip => {
+    const shortestTrips = _.filter(activeTrips, trip => (
       // Less than or equal to 10 minutes
-      return trip.trip.tripduration <= 600;
-    });
+      trip.trip.tripduration <= 600
+    ));
 
-    const mediumTrips = _.filter(activeTrips, trip => {
+    const mediumTrips = _.filter(activeTrips, trip => (
       // Greater than or equal to 10 minutes and 1 second
       // Less than or equal to 30 minutes and 1 second
-      return trip.trip.tripduration >= 601 &&
-      trip.trip.tripduration <= 1800;
-    });
+      trip.trip.tripduration >= 601 &&
+      trip.trip.tripduration <= 1800
+    ));
 
     const longestPaths = _.map(longestTrips, trip => (
       <Feature
@@ -185,7 +186,7 @@ class TripMap extends Component {
         <Layer
           type="symbol"
           id="endstation"
-          layout={{ 'icon-image': 'circle-15' }}
+          layout={{ 'icon-image': 'marker-15' }}
         >
           {endStations}
         </Layer>
@@ -214,6 +215,11 @@ class TripMap extends Component {
           )}
         </Map>
         <Calendar selected={this.state.dateAndTime} onChange={this.handleDateChange} />
+        <div className="key">
+          <p><span className="short" />Trips under 10 minutes</p>
+          <p><span className="medium" />Trips between 10 minutes and 30 minutes</p>
+          <p><span className="long" />Trips over 30 minutes</p>
+        </div>
         {this.state.trip != null && (
           <div className="popup">
             <ul>
