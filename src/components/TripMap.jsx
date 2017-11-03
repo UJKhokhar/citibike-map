@@ -36,7 +36,7 @@ class TripMap extends Component {
     this.state = {
       center: [-74.0059, 40.7128],
       zoom: [11],
-      style: 'mapbox://styles/mapbox/streets-v9',
+      style: 'mapbox://styles/mapbox/dark-v9',
       dateAndTime: moment('2017-09-01T07:00:00'),
       trip: null,
     };
@@ -76,11 +76,46 @@ class TripMap extends Component {
   renderPaths() {
     // Find a better way to only render paths for activeTrips
     const activeTrips = _.filter(this.props.trips, trip => (
+      // Lets nix any trips that started and ended at the same station. Probably due to redocks
+      trip.trip['start station id'] !== trip.trip['end station id'] &&
       moment(trip.trip.starttime).isSameOrBefore(this.state.dateAndTime) &&
       moment(trip.trip.stoptime).isSameOrAfter(this.state.dateAndTime)
     ));
 
-    const paths = _.map(activeTrips, trip => (
+    const longestTrips = _.filter(activeTrips, trip => {
+      // Greater than or equal to 30 minutes and 1 second
+      return trip.trip.tripduration >= 1801;
+    });
+
+    const shortestTrips = _.filter(activeTrips, trip => {
+      // Less than or equal to 10 minutes
+      return trip.trip.tripduration <= 600;
+    });
+
+    const mediumTrips = _.filter(activeTrips, trip => {
+      // Greater than or equal to 10 minutes and 1 second
+      // Less than or equal to 30 minutes and 1 second
+      return trip.trip.tripduration >= 601 &&
+      trip.trip.tripduration <= 1800;
+    });
+
+    const longestPaths = _.map(longestTrips, trip => (
+      <Feature
+        key={trip.trip.bikeid}
+        coordinates={trip.coords}
+        onClick={this.handlePathClick.bind(this, trip)}
+      />
+    ));
+
+    const mediumPaths = _.map(mediumTrips, trip => (
+      <Feature
+        key={trip.trip.bikeid}
+        coordinates={trip.coords}
+        onClick={this.handlePathClick.bind(this, trip)}
+      />
+    ));
+
+    const shortestPaths = _.map(shortestTrips, trip => (
       <Feature
         key={trip.trip.bikeid}
         coordinates={trip.coords}
@@ -107,14 +142,38 @@ class TripMap extends Component {
 
     return (
       <div>
-        <div className="numactive"><b>{activeTrips.length}</b> active trips on {this.state.dateAndTime.format('dddd, MMMM Do YYYY [at] h:mm:ssa')}</div>
+        <div className="numactive">
+          <b>{activeTrips.length}</b> active trips on {this.state.dateAndTime.format('dddd, MMMM Do YYYY [at] h:mm:ssa')}
+        </div>
         <Layer
           type="line"
           paint={{
             'line-width': 3,
+            'line-opacity': .75,
+            'line-color': '#f39057',
           }}
         >
-          {paths}
+          {longestPaths}
+        </Layer>
+        <Layer
+          type="line"
+          paint={{
+            'line-width': 3,
+            'line-opacity': .75,
+            'line-color': '#73d0ec',
+          }}
+        >
+          {mediumPaths}
+        </Layer>
+        <Layer
+          type="line"
+          paint={{
+            'line-width': 3,
+            'line-opacity': .75,
+            'line-color': '#aee59f',
+          }}
+        >
+          {shortestPaths}
         </Layer>
         <Layer
           type="symbol"
