@@ -34,8 +34,8 @@ class TripMap extends Component {
     super(props);
 
     this.state = {
-      center: [-74.0059, 40.7128],
-      zoom: [11],
+      center: [-73.996188, 40.727791],
+      zoom: [11.6],
       style: 'mapbox://styles/mapbox/dark-v9',
       dateAndTime: moment('2017-09-01T07:00:00'),
       trip: null,
@@ -143,7 +143,7 @@ class TripMap extends Component {
     return (
       <div>
         <div className="numactive">
-          <b>{activeTrips.length}</b> active trips on {this.state.dateAndTime.format('dddd, MMMM Do YYYY [at] h:mm:ssa')}
+          <b>{activeTrips.length}</b> active trips on {this.state.dateAndTime.format('dddd, MMMM Do YYYY [at] h:mma')}
         </div>
         <Layer
           type="line"
