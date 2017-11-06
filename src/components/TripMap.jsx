@@ -37,7 +37,7 @@ class TripMap extends Component {
     this.state = {
       center: [-73.996188, 40.727791],
       zoom: [11.6],
-      style: 'mapbox://styles/mapbox/dark-v9',
+      style: 'sprites',
       dateAndTime: moment('2017-09-01T07:00:00'),
       trip: null,
     };
@@ -179,14 +179,14 @@ class TripMap extends Component {
         <Layer
           type="symbol"
           id="startstation"
-          layout={{ 'icon-image': 'bicycle-share-15' }}
+          layout={{ 'icon-image': 'start-location-15' }}
         >
           {startStations}
         </Layer>
         <Layer
           type="symbol"
           id="endstation"
-          layout={{ 'icon-image': 'marker-15' }}
+          layout={{ 'icon-image': 'end-location-15' }}
         >
           {endStations}
         </Layer>
