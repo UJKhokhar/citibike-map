@@ -37,7 +37,7 @@ class TripMap extends Component {
     this.state = {
       center: [-73.996188, 40.727791],
       zoom: [11.6],
-      style: 'https://ujkhokhar.github.io/citibike-map/sprite/sprite',
+      style: 'mapbox://styles/umo/cj9owjlxv0ztz2so6etexptrc',
       dateAndTime: moment('2017-09-01T07:00:00'),
       trip: null,
     };
