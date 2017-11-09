@@ -37,7 +37,7 @@ class TripMap extends Component {
     this.state = {
       center: [-73.996188, 40.727791],
       zoom: [11.6],
-      style: 'mapbox://styles/umo/cj9owjlxv0ztz2so6etexptrc',
+      style: 'mapbox://styles/umo/cj9t0n7e62j6b2sqp1jy9gtag',
       dateAndTime: moment('2017-09-01T07:00:00'),
       trip: null,
     };
@@ -75,7 +75,6 @@ class TripMap extends Component {
   }
 
   renderPaths() {
-    // Find a better way to only render paths for activeTrips
     const activeTrips = _.filter(this.props.trips, trip => (
       // Lets nix any trips that started and ended at the same station. Probably due to redocks
       trip.trip['start station id'] !== trip.trip['end station id'] &&
@@ -179,14 +178,14 @@ class TripMap extends Component {
         <Layer
           type="symbol"
           id="startstation"
-          layout={{ 'icon-image': 'start-location-15' }}
+          layout={{ 'icon-image': 'start-location' }}
         >
           {startStations}
         </Layer>
         <Layer
           type="symbol"
           id="endstation"
-          layout={{ 'icon-image': 'end-location-15' }}
+          layout={{ 'icon-image': 'end-location' }}
         >
           {endStations}
         </Layer>
