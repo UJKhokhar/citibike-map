@@ -1,5 +1,7 @@
 # Citi Bike Map
-This project takes Citi Bike's public data and displays it on a couple of maps. The first map (Station Map) displays all stations and how many bikes and docking spots are at each station. It pulls data from Citi Bike's real-time [General Bikeshare Feed Specification](http://gbfs.citibikenyc.com/gbfs/gbfs.json).  
+This project takes Citi Bike's public data and displays it on a couple of maps. View it live [here](https://ujkhokhar.github.io/citibike-map/#/).
+
+The first map (Station Map) displays all stations and how many bikes and docking spots are at each station. It pulls data from Citi Bike's real-time [General Bikeshare Feed Specification](http://gbfs.citibikenyc.com/gbfs/gbfs.json).
 
 ![Station Map](https://github.com/UJKhokhar/citibike-map/blob/master/readme-images/station-map.png)
 
@@ -10,13 +12,13 @@ The second map (Trip Map) is a little more complex. It displays Citi Bike trip h
 ## Tools
 This app was built with React, Redux, Babel and Webpack. It also wouldn't have been possible without [Mapbox](https://www.mapbox.com/) and [alex3165's](https://github.com/alex3165)  [Mapbox react binding](https://github.com/alex3165/react-mapbox-gl).
 
-## Credit
-* [UJKhokhar](https://github.com/UJKhokhar/)
-* [markalexandercastillo](https://github.com/markalexandercastillo)
-
 ### To Run Locally
 `npm install` to install packages
 
 `npm run start` to start a local webpack-dev-server
 
 `npm run build` to compile a minified production ready build
+
+## Credit
+* [UJKhokhar](https://github.com/UJKhokhar/)
+* [markalexandercastillo](https://github.com/markalexandercastillo)
