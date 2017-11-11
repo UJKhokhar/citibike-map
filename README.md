@@ -9,10 +9,14 @@ The second map (Trip Map) is a little more complex. It displays Citi Bike trip h
 
 ![Trip Map](https://github.com/UJKhokhar/citibike-map/blob/master/readme-images/trip-map.png)
 
-## Tools
+### Tools
 This app was built with React, Redux, Babel and Webpack. It also wouldn't have been possible without [Mapbox](https://www.mapbox.com/) and [alex3165's](https://github.com/alex3165)  [Mapbox react binding](https://github.com/alex3165/react-mapbox-gl).
 
 ### To Run Locally
+You'll need to set up the [API](https://github.com/UJKhokhar/citibike-map-api) as well if you want to run this locally.
+
+After cloning the repo:
+
 `npm install` to install packages
 
 `npm run start` to start a local webpack-dev-server
